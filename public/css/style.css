@@ -333,3 +333,55 @@ tr:last-child td {
         white-space: nowrap;
     }
 }
+
+.form-dar {
+    max-width: 700px;
+}
+
+.form-butonlari {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.islem-alani {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.satir-ici-form {
+    display: inline;
+    margin: 0;
+}
+
+.buton-kucuk {
+    padding: 7px 11px;
+    font-size: 12px;
+}
+
+.kod-metin {
+    display: inline-block;
+    padding: 4px 7px;
+    border-radius: 5px;
+    background-color: #eef3f7;
+    color: #344054;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+}
+
+.salt-okunur-alan {
+    padding: 11px 12px;
+    border: 1px solid #dbe2e9;
+    border-radius: 7px;
+    background-color: #f5f7f9;
+    color: #667085;
+}
+
+.bos-kayit {
+    padding: 30px;
+    color: #667085;
+    text-align: center;
+}

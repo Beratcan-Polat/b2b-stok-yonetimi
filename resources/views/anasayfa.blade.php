@@ -24,7 +24,9 @@
                 Ürünlerin bağlı olacağı kategorileri ekleyin, düzenleyin ve yönetin.
             </p>
 
-            <span class="durum-etiketi">Sonraki aşama</span>
+            <a href="{{ route('kategoriler.index') }}" class="buton buton-birincil">
+                Kategorileri Yönet
+            </a>
         </article>
 
         <article class="kart">
