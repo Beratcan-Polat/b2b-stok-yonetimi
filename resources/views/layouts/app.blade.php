@@ -19,7 +19,7 @@
             <nav class="menu">
                 <a href="{{ route('anasayfa') }}">Ana Sayfa</a>
                 <a href="{{ route('kategoriler.index') }}">Kategoriler</a>
-                <span class="pasif-menu">Ürünler</span>
+                <a href="{{ route('urunler.index') }}">Ürünler</a>
                 <span class="pasif-menu">Siparişler</span>
             </nav>
         </div>

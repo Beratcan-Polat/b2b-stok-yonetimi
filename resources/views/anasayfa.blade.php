@@ -38,7 +38,9 @@
                 Ürün bilgilerini, fiyatlarını, stoklarını ve görsellerini yönetin.
             </p>
 
-            <span class="durum-etiketi">Hazırlanacak</span>
+            <a href="{{ route('urunler.index') }}" class="buton buton-birincil">
+                Ürünleri Yönet
+            </a>
         </article>
 
         <article class="kart">

@@ -385,3 +385,99 @@ tr:last-child td {
     color: #667085;
     text-align: center;
 }
+
+.urun-gorseli {
+    width: 64px;
+    height: 64px;
+    display: block;
+    object-fit: cover;
+    border: 1px solid #dbe2e9;
+    border-radius: 8px;
+}
+
+.gorsel-yok {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #cfd7e2;
+    border-radius: 8px;
+    background-color: #f5f7f9;
+    color: #8a94a4;
+    font-size: 10px;
+    text-align: center;
+}
+
+.mevcut-gorsel {
+    width: 150px;
+    height: 150px;
+    display: block;
+    object-fit: cover;
+    border: 1px solid #dbe2e9;
+    border-radius: 10px;
+}
+
+.urun-alt-bilgi {
+    margin-top: 3px;
+    color: #667085;
+    font-size: 12px;
+}
+
+.form-aciklama {
+    display: block;
+    margin-top: 6px;
+    color: #667085;
+    font-size: 12px;
+}
+
+.stok-etiketi {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.stok-var {
+    background-color: #eaf8ef;
+    color: #25643a;
+}
+
+.stok-yok {
+    background-color: #fff0f0;
+    color: #a12b2b;
+}
+
+.sayfalama {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #667085;
+    font-size: 14px;
+}
+
+.sayfalama a,
+.sayfalama-pasif {
+    padding: 8px 13px;
+    border: 1px solid #dbe2e9;
+    border-radius: 7px;
+    background-color: #ffffff;
+    text-decoration: none;
+}
+
+.sayfalama a {
+    color: #176b87;
+}
+
+.sayfalama a:hover {
+    background-color: #eef3f7;
+}
+
+.sayfalama-pasif {
+    color: #a3abb7;
+    cursor: not-allowed;
+}
