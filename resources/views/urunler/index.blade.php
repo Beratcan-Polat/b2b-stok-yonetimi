@@ -15,6 +15,64 @@
         </a>
     </section>
 
+    <form
+    action="{{ route('urunler.index') }}"
+    method="GET"
+    class="filtre-formu"
+>
+    <div class="filtre-alanlari">
+
+        <div class="form-grup filtre-grup">
+            <label for="search">Ürün Adı</label>
+
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Ürün adına göre ara"
+            >
+        </div>
+
+        <div class="form-grup filtre-grup">
+            <label for="category_id">Kategori</label>
+
+            <select id="category_id" name="category_id">
+                <option value="">Tüm kategoriler</option>
+
+                @foreach ($kategoriler as $kategori)
+                    <option
+                        value="{{ $kategori->id }}"
+                        @selected(request('category_id') == $kategori->id)
+                    >
+                        {{ $kategori->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="filtre-butonlari">
+            <button type="submit" class="buton buton-birincil">
+                Filtrele
+            </button>
+
+            @if (request()->filled('search') || request()->filled('category_id'))
+                <a
+                    href="{{ route('urunler.index') }}"
+                    class="buton buton-ikincil"
+                >
+                    Temizle
+                </a>
+            @endif
+        </div>
+
+    </div>
+
+    <div class="sonuc-bilgisi">
+        Toplam {{ $urunler->total() }} ürün bulundu.
+    </div>
+</form>
+
     <div class="tablo-kapsayici">
         <table>
             <thead>

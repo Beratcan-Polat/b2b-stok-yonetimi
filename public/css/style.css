@@ -481,3 +481,47 @@ tr:last-child td {
     color: #a3abb7;
     cursor: not-allowed;
 }
+
+.filtre-formu {
+    margin-bottom: 22px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background-color: #ffffff;
+}
+
+.filtre-alanlari {
+    display: grid;
+    grid-template-columns: minmax(220px, 2fr) minmax(180px, 1fr) auto;
+    align-items: end;
+    gap: 15px;
+}
+
+.filtre-grup {
+    margin-bottom: 0;
+}
+
+.filtre-butonlari {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sonuc-bilgisi {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #e8edf2;
+    color: #667085;
+    font-size: 13px;
+}
+
+@media (max-width: 750px) {
+    .filtre-alanlari {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
+
+    .filtre-butonlari {
+        flex-wrap: wrap;
+    }
+}

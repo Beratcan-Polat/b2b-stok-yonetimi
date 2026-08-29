@@ -10,11 +10,24 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $urunler = Product::with('category')->latest()->paginate(10);
+        $arama = $request->input('search');
+        $kategoriId = $request->input('category_id');
 
-        return view('urunler.index', compact('urunler'));
+        $urunSorgusu = Product::with('category');
+
+        if($arama)
+            $urunSorgusu->where('name', 'like', '%'. $arama. '%');
+
+        if($kategoriId)
+            $urunSorgusu->where('category_id', $kategoriId);
+
+        $urunler = $urunSorgusu->latest()->paginate(10)->withQueryString();
+
+        $kategoriler = Category::orderBy('name')->get();
+
+        return view('urunler.index', compact('urunler', 'kategoriler'));
     }
 
 
