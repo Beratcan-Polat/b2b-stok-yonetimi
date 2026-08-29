@@ -10,9 +10,15 @@
             <p>Ürün bilgilerini, görsellerini, fiyatlarını ve stoklarını yönetin.</p>
         </div>
 
-        <a href="{{ route('urunler.create') }}" class="buton buton-birincil">
-            Yeni Ürün Ekle
-        </a>
+        <div class="baslik-butonlari">
+            <a href="{{ route('urunler.silinenler') }}" class="buton buton-ikincil">
+                Silinen Ürünler
+            </a>
+
+            <a href="{{ route('urunler.create') }}" class="buton buton-birincil">
+                Yeni Ürün Ekle
+            </a>
+        </div>
     </section>
 
     <form action="{{ route('urunler.index') }}" method="GET" class="filtre-formu">

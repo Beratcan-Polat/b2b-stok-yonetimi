@@ -581,3 +581,15 @@ tr:last-child td {
         grid-template-columns: 1fr;
     }
 }
+
+.baslik-butonlari {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.silinen-satir {
+    background-color: #fafafa;
+    color: #667085;
+}

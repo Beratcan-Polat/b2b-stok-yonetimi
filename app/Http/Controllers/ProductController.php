@@ -17,10 +17,10 @@ class ProductController extends Controller
 
         $urunSorgusu = Product::with('category');
 
-        if($arama)
-            $urunSorgusu->where('name', 'like', '%'. $arama. '%');
+        if ($arama)
+            $urunSorgusu->where('name', 'like', '%' . $arama . '%');
 
-        if($kategoriId)
+        if ($kategoriId)
             $urunSorgusu->where('category_id', $kategoriId);
 
         $urunler = $urunSorgusu->latest()->paginate(10)->withQueryString();
@@ -72,10 +72,9 @@ class ProductController extends Controller
 
         $gorselYolu = null;
 
-        if($request->hasFile('image'))
-            {
-                $gorselYolu = $request->file('image')->store('product', 'public');
-            }
+        if ($request->hasFile('image')) {
+            $gorselYolu = $request->file('image')->store('product', 'public');
+        }
 
         Product::create([
             'category_id' => $veriler['category_id'],
@@ -87,8 +86,6 @@ class ProductController extends Controller
         ]);
 
         return redirect()->route('urunler.index')->with('success', 'Ürünler başarıyla eklendi.');
-            
-            
     }
 
 
@@ -133,13 +130,12 @@ class ProductController extends Controller
 
         $gorselYolu = $urun->image_path;
 
-        if($request->hasFile('image'))
-            {
-                if ($urun->image_path)
-                    Storage::disk('public')->delete($urun->image_path);
+        if ($request->hasFile('image')) {
+            if ($urun->image_path)
+                Storage::disk('public')->delete($urun->image_path);
 
-                $gorselYolu = $request->file('image')->store('products', 'public');
-            }
+            $gorselYolu = $request->file('image')->store('products', 'public');
+        }
 
         $urun->update([
             'category_id' => $veriler['category_id'],
@@ -159,5 +155,21 @@ class ProductController extends Controller
         $urun->delete();
 
         return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla silindi.');
+    }
+
+    public function silinenler()
+    {
+        $urunler = Product::onlyTrashed()->with('category')->latest('deleted_at')->paginate(10);
+
+        return view('urunler.silinenler', compact('urunler'));
+    }
+
+    public function geriYukle($id)
+    {
+        $urun = Product::onlyTrashed()->findOrFail($id);
+
+        $urun->restore();
+
+        return redirect()->route('urunler.silinenler')->with('success', 'Ürün başarıyla geri yüklendi.');
     }
 }

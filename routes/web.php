@@ -21,3 +21,7 @@ Route::get('/urunler/{urun}/siparis', [OrderController::class, 'create'])->name(
 
 Route::post('/urunler/{urun}/siparis', [OrderController::class, 'store'])->name('siparisler.store');
 
+Route::get('/urunler/silinenler', [ProductController::class, 'silinenler'])->name('urunler.silinenler');
+
+Route::patch('/urunler/{id}/geri-yukle', [ProductController::class, 'geriYukle'])->name('urunler.geri-yukle');
+
