@@ -1,58 +1,250 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# B2B Sipariş ve Stok Yönetimi
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Laravel ve MySQL kullanılarak geliştirilmiş, kategori, ürün, stok ve sipariş işlemlerinin yönetilebildiği basit bir B2B yönetim panelidir.
 
-## About Laravel
+Proje; ilişkisel veritabanı kullanımı, Eloquent ilişkileri, görsel yükleme, arama, filtreleme, pagination, sipariş oluşturma ve stok düşürme işlemlerini öğrenmek amacıyla hazırlanmıştır.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Kullanılan Teknolojiler
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.3+
+- Laravel 13
+- MySQL
+- Blade
+- HTML
+- CSS
+- Git ve GitHub
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Projede harici bir yönetim paneli, JavaScript framework’ü veya ek CRUD kütüphanesi kullanılmamıştır.
 
-## Learning Laravel
+## Proje Özellikleri
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Kategori Yönetimi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Kategori listeleme
+- Yeni kategori ekleme
+- Kategori düzenleme
+- Kategori silme
+- Kategori adından otomatik slug oluşturma
+- Ürün bağlı kategorilerin yanlışlıkla silinmesini engelleme
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Ürün Yönetimi
 
-## Agentic Development
+- Ürün listeleme
+- Yeni ürün ekleme
+- Ürün düzenleme
+- Ürün silme
+- Ürünü kategoriye bağlama
+- Benzersiz SKU kontrolü
+- Fiyat ve stok yönetimi
+- Ürün görseli yükleme
+- Görsel formatı ve boyut doğrulaması
+- Soft Delete ile güvenli silme
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Görsel Yükleme
+
+Desteklenen görsel formatları:
+
+- JPEG
+- JPG
+- PNG
+- WEBP
+
+Yüklenebilecek en yüksek dosya boyutu 2 MB’dır. Görseller Laravel’in `public` diski kullanılarak saklanır.
+
+### Arama ve Filtreleme
+
+- Ürün adına göre arama
+- Kategoriye göre filtreleme
+- Arama ve kategori filtresini birlikte kullanma
+- Her sayfada 10 ürün gösterme
+- Sayfa geçişlerinde filtreleri koruma
+- Eager Loading ile N+1 sorgu problemini önleme
+
+### Sipariş ve Stok Yönetimi
+
+- Ürün üzerinden hızlı sipariş oluşturma
+- Müşteri adı ve sipariş adedi kaydetme
+- Sipariş miktarını mevcut stokla karşılaştırma
+- Stoktan fazla siparişi engelleme
+- Toplam tutarı sunucu tarafında otomatik hesaplama
+- Sipariş sonrasında ürün stoğunu otomatik azaltma
+- Stok sıfır olduğunda sipariş butonunu pasifleştirme
+- Siparişleri listeleme
+
+### Bonus Özellik
+
+- Silinen ürünleri ayrı sayfada listeleme
+- Soft Delete ile silinen ürünleri geri yükleme
+- Silinen ürünün görselini koruma
+
+## Veritabanı Yapısı
+
+Projede üç ana tablo bulunmaktadır.
+
+### categories
+
+- id
+- name
+- slug
+- created_at
+- updated_at
+
+### products
+
+- id
+- category_id
+- name
+- sku
+- price
+- stock
+- image_path
+- deleted_at
+- created_at
+- updated_at
+
+### orders
+
+- id
+- product_id
+- customer_name
+- quantity
+- total_price
+- status
+- created_at
+- updated_at
+
+## Eloquent İlişkileri
+
+- Bir kategori birden fazla ürüne sahip olabilir.
+- Her ürün bir kategoriye aittir.
+- Bir ürün birden fazla siparişe sahip olabilir.
+- Her sipariş bir ürüne aittir.
+
+## Kurulum
+
+### 1. Projeyi klonlayın
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/Beratcan-Polat/b2b-stok-yonetimi.git
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Proje klasörüne girin
 
-## Contributing
+```bash
+cd b2b-stok-yonetimi
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Composer paketlerini yükleyin
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Ortam dosyasını oluşturun
 
-## Security Vulnerabilities
+Windows PowerShell:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```powershell
+Copy-Item .env.example .env
+```
 
-## License
+### 5. Uygulama anahtarını oluşturun
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan key:generate
+```
+
+### 6. MySQL veritabanını oluşturun
+
+phpMyAdmin üzerinden aşağıdaki isimle boş bir veritabanı oluşturun:
+
+```text
+b2b_stok_yonetimi
+```
+
+### 7. Veritabanı bağlantısını yapılandırın
+
+`.env` dosyasındaki veritabanı bölümünü düzenleyin:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=b2b_stok_yonetimi
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+MySQL kullanıcınızın şifresi varsa `DB_PASSWORD` alanına yazın.
+
+### 8. Tabloları ve örnek verileri oluşturun
+
+```bash
+php artisan migrate --seed
+```
+
+Seeder işlemi sonucunda örnek kategoriler ve ürünler oluşturulur.
+
+### 9. Görsel bağlantısını oluşturun
+
+```bash
+php artisan storage:link
+```
+
+### 10. Projeyi çalıştırın
+
+```bash
+php artisan serve
+```
+
+Tarayıcıdan aşağıdaki adresi açın:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Seeder İçeriği
+
+Projede aşağıdaki Seeder dosyaları bulunmaktadır:
+
+- `CategorySeeder`
+- `ProductSeeder`
+
+Seeder ile dört örnek kategori ve pagination testinde kullanılabilecek 12 örnek ürün oluşturulur.
+
+## Form Doğrulamaları
+
+Projede aşağıdaki temel doğrulamalar uygulanmaktadır:
+
+- Zorunlu alan kontrolü
+- Benzersiz kategori ve SKU kontrolü
+- Fiyatın negatif olmaması
+- Stok miktarının tam sayı ve negatif olmaması
+- Sipariş miktarının mevcut stoktan fazla olmaması
+- Görsel formatı ve 2 MB dosya boyutu kontrolü
+
+## Temel Artisan Komutları
+
+Migration durumunu kontrol etmek:
+
+```bash
+php artisan migrate:status
+```
+
+Seeder çalıştırmak:
+
+```bash
+php artisan db:seed
+```
+
+## Proje Notları
+
+- `.env` dosyası güvenlik nedeniyle GitHub’a gönderilmez.
+- Kullanıcı tarafından yüklenen test görselleri GitHub’a gönderilmez.
+- Toplam sipariş tutarı formdan alınmaz; sunucu tarafında hesaplanır.
+- Ürün silindiğinde kayıt tamamen kaldırılmaz ve `deleted_at` alanı doldurulur.
+- Sipariş verildiğinde ürün stoğu otomatik olarak azaltılır.
+
+## Geliştirici
+
+Beratcan Polat
