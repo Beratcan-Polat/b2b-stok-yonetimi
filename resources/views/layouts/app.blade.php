@@ -20,7 +20,7 @@
                 <a href="{{ route('anasayfa') }}">Ana Sayfa</a>
                 <a href="{{ route('kategoriler.index') }}">Kategoriler</a>
                 <a href="{{ route('urunler.index') }}">Ürünler</a>
-                <span class="pasif-menu">Siparişler</span>
+                <a href="{{ route('siparisler.index') }}">Siparişler</a>
             </nav>
         </div>
     </header>

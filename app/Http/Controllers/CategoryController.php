@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -23,30 +25,22 @@ class CategoryController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $veriler = $request->validate(
-            [
-                'name' => 'required|string|max:255|unique:categories,name'
-            ],
-            [
-                'name.required' => 'Kategori adı zorunludur.',
-                'name.string' => 'Kategori adı metin olmalıdır.',
-                'name.max' => 'Kategori en fazla 255 karakter olabilir.',
-                'name.unique' => 'Bu kategori adı daha önce kullanıldı.'
-            ]
-        );
+
+
+        $veriler = $request->validated();
+
 
         $slug = Str::slug($veriler['name']);
 
         $slugKullaniliyor = Category::where('slug', $slug)->exists();
 
-        if ($slugKullaniliyor)
-            {
-                return back()->withErrors([
-                    'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.',
-                ])->withInput();
-            }
+        if ($slugKullaniliyor) {
+            return back()->withErrors([
+                'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.',
+            ])->withInput();
+        }
 
         Category::create([
             'name' => $veriler['name'],
@@ -67,7 +61,7 @@ class CategoryController extends Controller
     {
         $veriler = $request->validate(
             [
-                'name' => 'required|string|max:255|unique:categories,name,'.$kategori->id,
+                'name' => 'required|string|max:255|unique:categories,name,' . $kategori->id,
             ],
             [
                 'name.required' => 'Kategori adı zorunludur.',
@@ -81,12 +75,11 @@ class CategoryController extends Controller
 
         $slugKullaniliyor = Category::where('slug', $slug)->where('id', '!=', $kategori->id)->exists();
 
-        if($slugKullaniliyor)
-            {
-                return back()->withErrors([
-                    'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.'
-                ])->withInput();
-            }
+        if ($slugKullaniliyor) {
+            return back()->withErrors([
+                'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.'
+            ])->withInput();
+        }
 
         $kategori->update([
             'name' => $veriler['name'],

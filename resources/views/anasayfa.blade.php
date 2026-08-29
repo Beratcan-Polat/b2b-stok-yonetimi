@@ -52,7 +52,9 @@
                 Müşteri siparişlerini oluşturun ve ürün stoklarını takip edin.
             </p>
 
-            <span class="durum-etiketi">Hazırlanacak</span>
+            <a href="{{ route('siparisler.index') }}" class="buton buton-birincil">
+                Siparişleri Görüntüle
+            </a>
         </article>
 
     </section>
