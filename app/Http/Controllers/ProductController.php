@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Product::class);
+
         $arama = $request->input('search');
         $kategoriId = $request->input('category_id');
 
         $urunSorgusu = Product::with('category');
 
-        if ($arama)
+        if ($arama) {
             $urunSorgusu->where('name', 'like', '%' . $arama . '%');
+        }
 
-        if ($kategoriId)
+        if ($kategoriId) {
             $urunSorgusu->where('category_id', $kategoriId);
+        }
 
         $urunler = $urunSorgusu->latest()->paginate(10)->withQueryString();
 
@@ -30,50 +35,23 @@ class ProductController extends Controller
         return view('urunler.index', compact('urunler', 'kategoriler'));
     }
 
-
     public function create()
     {
+        Gate::authorize('create', Product::class);
+
         $kategoriler = Category::orderBy('name')->get();
 
         return view('urunler.create', compact('kategoriler'));
     }
 
-
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $veriler = $request->validate(
-            [
-                'category_id' => 'required|exists:categories,id',
-                'name' => 'required|string|max:255',
-                'sku' => 'required|string|max:100|unique:products,sku',
-                'price' => 'required|numeric|min:0',
-                'stock' => 'required|integer|min:0',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048'
-            ],
-            [
-                'category_id.required' => 'Kategori seçimi zorunludur.',
-                'category_id.exists' => 'Seçilen kategori bulunamadı.',
-                'name.required' => 'Ürün adı zorunludur.',
-                'name.max' => 'Ürün adı en fazla 255 karakter olabilir.',
-                'sku.required' => 'SKU bilgisi zorunludur.',
-                'sku.max' => 'SKU en fazla 100 karakter olabilir.',
-                'sku.unique' => 'Bu SKU daha önce kullanılmış.',
-                'price.required' => 'Ürün fiyatı zorunludur.',
-                'price.numeric' => 'Ürün fiyatı sayısal olmalıdır.',
-                'price.min' => 'Ürün fiyatı negatif olamaz.',
-                'stock.required' => 'Stok adedi zorunludur.',
-                'stock.integer' => 'Stok adedi tam sayı olmalıdır.',
-                'stock.min' => 'Stok adedi negatif olamaz.',
-                'image.image' => 'Yüklenen dosya bir görsel olmalıdır.',
-                'image.mimes' => 'Görsel JPEG, PNG, JPG veya WEBP formatında olmalıdır.',
-                'image.max' => 'Görsel en fazla 2 MB olabilir.',
-            ]
-        );
+        $veriler = $request->validated();
 
         $gorselYolu = null;
 
         if ($request->hasFile('image')) {
-            $gorselYolu = $request->file('image')->store('product', 'public');
+            $gorselYolu = $request->file('image')->store('products', 'public');
         }
 
         Product::create([
@@ -85,54 +63,28 @@ class ProductController extends Controller
             'image_path' => $gorselYolu,
         ]);
 
-        return redirect()->route('urunler.index')->with('success', 'Ürünler başarıyla eklendi.');
+        return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla eklendi.');
     }
-
 
     public function edit(Product $urun)
     {
+        Gate::authorize('update', $urun);
+
         $kategoriler = Category::orderBy('name')->get();
 
         return view('urunler.edit', compact('urun', 'kategoriler'));
     }
 
-
-    public function update(Request $request, Product $urun)
+    public function update(ProductRequest $request, Product $urun)
     {
-        $veriler = $request->validate(
-            [
-                'category_id' => 'required|exists:categories,id',
-                'name' => 'required|string|max:255',
-                'sku' => 'required|string|max:100|unique:products,sku,' . $urun->id,
-                'price' => 'required|numeric|min:0',
-                'stock' => 'required|integer|min:0',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            ],
-            [
-                'category_id.required' => 'Kategori seçimi zorunludur.',
-                'category_id.exists' => 'Seçilen kategori bulunamadı.',
-                'name.required' => 'Ürün adı zorunludur.',
-                'name.max' => 'Ürün adı en fazla 255 karakter olabilir.',
-                'sku.required' => 'SKU bilgisi zorunludur.',
-                'sku.max' => 'SKU en fazla 100 karakter olabilir.',
-                'sku.unique' => 'Bu SKU daha önce kullanılmış.',
-                'price.required' => 'Ürün fiyatı zorunludur.',
-                'price.numeric' => 'Ürün fiyatı sayısal olmalıdır.',
-                'price.min' => 'Ürün fiyatı negatif olamaz.',
-                'stock.required' => 'Stok adedi zorunludur.',
-                'stock.integer' => 'Stok adedi tam sayı olmalıdır.',
-                'stock.min' => 'Stok adedi negatif olamaz.',
-                'image.image' => 'Yüklenen dosya bir görsel olmalıdır.',
-                'image.mimes' => 'Görsel JPEG, PNG, JPG veya WEBP formatında olmalıdır.',
-                'image.max' => 'Görsel en fazla 2 MB olabilir.',
-            ]
-        );
+        $veriler = $request->validated();
 
         $gorselYolu = $urun->image_path;
 
         if ($request->hasFile('image')) {
-            if ($urun->image_path)
+            if ($urun->image_path) {
                 Storage::disk('public')->delete($urun->image_path);
+            }
 
             $gorselYolu = $request->file('image')->store('products', 'public');
         }
@@ -149,9 +101,10 @@ class ProductController extends Controller
         return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla güncellendi.');
     }
 
-
     public function destroy(Product $urun)
     {
+        Gate::authorize('delete', $urun);
+
         $urun->delete();
 
         return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla silindi.');
@@ -159,6 +112,8 @@ class ProductController extends Controller
 
     public function silinenler()
     {
+        Gate::authorize('viewTrashed', Product::class);
+
         $urunler = Product::onlyTrashed()->with('category')->latest('deleted_at')->paginate(10);
 
         return view('urunler.silinenler', compact('urunler'));
@@ -166,6 +121,8 @@ class ProductController extends Controller
 
     public function geriYukle($id)
     {
+        Gate::authorize('restore', Product::class);
+
         $urun = Product::onlyTrashed()->findOrFail($id);
 
         $urun->restore();

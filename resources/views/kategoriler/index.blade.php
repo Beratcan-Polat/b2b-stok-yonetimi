@@ -10,9 +10,11 @@
             <p>Ürünlerin bağlı olacağı kategorileri görüntüleyin ve yönetin.</p>
         </div>
 
-        <a href="{{ route('kategoriler.create') }}" class="buton buton-birincil">
-            Yeni Kategori Ekle
-        </a>
+        @can('create', App\Models\Category::class)
+            <a href="{{ route('kategoriler.create') }}" class="buton buton-birincil">
+                Yeni Kategori Ekle
+            </a>
+        @endcan
     </section>
 
     <div class="tablo-kapsayici">
@@ -43,29 +45,33 @@
 
                         <td>
                             <div class="islem-alani">
-                                <a
-                                    href="{{ route('kategoriler.edit', $kategori) }}"
-                                    class="buton buton-ikincil buton-kucuk"
-                                >
-                                    Düzenle
-                                </a>
-
-                                <form
-                                    action="{{ route('kategoriler.destroy', $kategori) }}"
-                                    method="POST"
-                                    class="satir-ici-form"
-                                    onsubmit="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')"
-                                >
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        type="submit"
-                                        class="buton buton-tehlike buton-kucuk"
+                                @can('update', $kategori)
+                                    <a
+                                        href="{{ route('kategoriler.edit', $kategori) }}"
+                                        class="buton buton-ikincil buton-kucuk"
                                     >
-                                        Sil
-                                    </button>
-                                </form>
+                                        Düzenle
+                                    </a>
+                                @endcan
+
+                                @can('delete', $kategori)
+                                    <form
+                                        action="{{ route('kategoriler.destroy', $kategori) }}"
+                                        method="POST"
+                                        class="satir-ici-form"
+                                        onsubmit="return confirm('Bu kategoriyi silmek istediğinize emin misiniz?')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="buton buton-tehlike buton-kucuk"
+                                        >
+                                            Sil
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>

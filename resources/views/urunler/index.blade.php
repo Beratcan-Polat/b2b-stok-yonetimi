@@ -11,13 +11,17 @@
         </div>
 
         <div class="baslik-butonlari">
-            <a href="{{ route('urunler.silinenler') }}" class="buton buton-ikincil">
-                Silinen Ürünler
-            </a>
+            @can('viewTrashed', App\Models\Product::class)
+                <a href="{{ route('urunler.silinenler') }}" class="buton buton-ikincil">
+                    Silinen Ürünler
+                </a>
+            @endcan
 
-            <a href="{{ route('urunler.create') }}" class="buton buton-birincil">
-                Yeni Ürün Ekle
-            </a>
+            @can('create', App\Models\Product::class)
+                <a href="{{ route('urunler.create') }}" class="buton buton-birincil">
+                    Yeni Ürün Ekle
+                </a>
+            @endcan
         </div>
     </section>
 
@@ -116,30 +120,36 @@
 
                         <td>
                             <div class="islem-alani">
-                                @if ($urun->stock > 0)
-                                    <a href="{{ route('siparisler.create', $urun) }}"
-                                        class="buton buton-birincil buton-kucuk">
-                                        Hızlı Sipariş Ver
+                                @can('create', App\Models\Order::class)
+                                    @if ($urun->stock > 0)
+                                        <a href="{{ route('siparisler.create', $urun) }}"
+                                            class="buton buton-birincil buton-kucuk">
+                                            Hızlı Sipariş Ver
+                                        </a>
+                                    @else
+                                        <span class="buton buton-devre-disi buton-kucuk">
+                                            Hızlı Sipariş Ver
+                                        </span>
+                                    @endif
+                                @endcan
+
+                                @can('update', $urun)
+                                    <a href="{{ route('urunler.edit', $urun) }}" class="buton buton-ikincil buton-kucuk">
+                                        Düzenle
                                     </a>
-                                @else
-                                    <span class="buton buton-devre-disi buton-kucuk">
-                                        Hızlı Sipariş Ver
-                                    </span>
-                                @endif
+                                @endcan
 
-                                <a href="{{ route('urunler.edit', $urun) }}" class="buton buton-ikincil buton-kucuk">
-                                    Düzenle
-                                </a>
+                                @can('delete', $urun)
+                                    <form action="{{ route('urunler.destroy', $urun) }}" method="POST" class="satir-ici-form"
+                                        onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?')">
+                                        @csrf
+                                        @method('DELETE')
 
-                                <form action="{{ route('urunler.destroy', $urun) }}" method="POST" class="satir-ici-form"
-                                    onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?')">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="buton buton-tehlike buton-kucuk">
-                                        Sil
-                                    </button>
-                                </form>
+                                        <button type="submit" class="buton buton-tehlike buton-kucuk">
+                                            Sil
+                                        </button>
+                                    </form>
+                                @endcan
                             </div>
                         </td>
                     </tr>

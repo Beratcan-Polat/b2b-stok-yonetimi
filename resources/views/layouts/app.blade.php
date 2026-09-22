@@ -17,10 +17,37 @@
             </a>
 
             <nav class="menu">
-                <a href="{{ route('anasayfa') }}">Ana Sayfa</a>
-                <a href="{{ route('kategoriler.index') }}">Kategoriler</a>
-                <a href="{{ route('urunler.index') }}">Ürünler</a>
-                <a href="{{ route('siparisler.index') }}">Siparişler</a>
+                @auth
+                    <a href="{{ route('anasayfa') }}">Ana Sayfa</a>
+
+                    @can('viewAny', App\Models\Category::class)
+                        <a href="{{ route('kategoriler.index') }}">Kategoriler</a>
+                    @endcan
+
+                    @can('viewAny', App\Models\Product::class)
+                        <a href="{{ route('urunler.index') }}">Ürünler</a>
+                    @endcan
+
+                    @can('viewAny', App\Models\Order::class)
+                        <a href="{{ route('siparisler.index') }}">Siparişler</a>
+                    @endcan
+
+                    @can('viewAny', App\Models\User::class)
+                        <a href="{{ route('kullanicilar.index') }}">Kullanıcılar</a>
+                    @endcan
+
+                    <span class="kullanici-bilgi">
+                        {{ auth()->user()->name }}
+                    </span>
+
+                    <form action="{{ route('cikis') }}" method="POST" class="satir-ici-form">
+                        @csrf
+
+                        <button type="submit" class="buton buton-ikincil buton-kucuk">
+                            Çıkış
+                        </button>
+                    </form>
+                @endauth
             </nav>
         </div>
     </header>

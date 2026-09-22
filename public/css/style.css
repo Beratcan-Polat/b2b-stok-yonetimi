@@ -593,3 +593,68 @@ tr:last-child td {
     background-color: #fafafa;
     color: #667085;
 }
+
+.giris-ekrani {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 24px 0;
+}
+
+.giris-kutusu {
+    width: 100%;
+    max-width: 380px;
+    padding: 32px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px -18px rgba(21, 32, 48, 0.35);
+}
+
+.giris-baslik {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.giris-baslik h1 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    color: #152030;
+}
+
+.giris-baslik p {
+    margin: 0;
+    color: #667085;
+    font-size: 14px;
+}
+
+.giris-kutusu .buton {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.hatirla {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #344054;
+    font-size: 14px;
+}
+
+.hatirla input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.giris-bilgi {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #eef1f5;
+    color: #667085;
+    font-size: 13px;
+    line-height: 1.7;
+}

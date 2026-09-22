@@ -2,40 +2,43 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class CategoryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
-        return true;
+        $kategori = $this->route('kategori');
+
+        return $kategori
+            ? Gate::allows('update', $kategori)
+            : Gate::allows('create', Category::class);
     }
 
-
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        $kategori = $this->route('kategori');
+
         return [
-            'name' => 'required|string|max:255|unique:categories,name'
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'name')->ignore($kategori),
+            ],
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
-        return       [
+        return [
             'name.required' => 'Kategori adı zorunludur.',
             'name.string' => 'Kategori adı metin olmalıdır.',
             'name.max' => 'Kategori en fazla 255 karakter olabilir.',
-            'name.unique' => 'Bu kategori adı daha önce kullanıldı.'
+            'name.unique' => 'Bu kategori adı daha önce kullanıldı.',
         ];
     }
 }
