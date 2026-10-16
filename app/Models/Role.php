@@ -12,6 +12,11 @@ class Role extends Model
         'label',
     ];
 
+    protected function casts(): array
+    {
+        return ['is_super_admin' => 'boolean'];
+    }
+
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(Permission::class);
@@ -20,5 +25,10 @@ class Role extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->is_super_admin;
     }
 }

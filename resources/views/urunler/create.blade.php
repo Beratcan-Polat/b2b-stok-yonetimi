@@ -110,7 +110,7 @@
                 Ürünü Kaydet
             </button>
 
-            <a href="{{ route('urunler.index') }}" class="buton buton-ikincil">
+            <a href="{{ auth()->user()->can('viewAny', App\Models\Product::class) ? route('urunler.index') : route('anasayfa') }}" class="buton buton-ikincil">
                 İptal
             </a>
         </div>

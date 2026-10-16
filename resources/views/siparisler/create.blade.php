@@ -80,7 +80,7 @@
                 Siparişi Oluştur
             </button>
 
-            <a href="{{ route('urunler.index') }}" class="buton buton-ikincil">
+            <a href="{{ auth()->user()->can('viewAny', App\Models\Product::class) ? route('urunler.index') : route('siparisler.urun-sec') }}" class="buton buton-ikincil">
                 İptal
             </a>
         </div>

@@ -37,7 +37,7 @@
                 Kategoriyi Kaydet
             </button>
 
-            <a href="{{ route('kategoriler.index') }}" class="buton buton-ikincil">
+            <a href="{{ auth()->user()->can('viewAny', App\Models\Category::class) ? route('kategoriler.index') : route('anasayfa') }}" class="buton buton-ikincil">
                 İptal
             </a>
         </div>

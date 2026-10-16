@@ -15,7 +15,7 @@
 
     <section class="kart-grid">
 
-        @can('viewAny', App\Models\Category::class)
+        @canany(['viewAny', 'create'], App\Models\Category::class)
             <article class="kart">
                 <div class="kart-ikon">K</div>
 
@@ -25,13 +25,13 @@
                     Ürünlerin bağlı olacağı kategorileri ekleyin, düzenleyin ve yönetin.
                 </p>
 
-                <a href="{{ route('kategoriler.index') }}" class="buton buton-birincil">
-                    Kategorileri Yönet
+                <a href="{{ auth()->user()->can('viewAny', App\Models\Category::class) ? route('kategoriler.index') : route('kategoriler.create') }}" class="buton buton-birincil">
+                    {{ auth()->user()->can('viewAny', App\Models\Category::class) ? 'Kategorileri Yönet' : 'Kategori Ekle' }}
                 </a>
             </article>
-        @endcan
+        @endcanany
 
-        @can('viewAny', App\Models\Product::class)
+        @canany(['viewAny', 'create'], App\Models\Product::class)
             <article class="kart">
                 <div class="kart-ikon">Ü</div>
 
@@ -41,13 +41,13 @@
                     Ürün bilgilerini, fiyatlarını, stoklarını ve görsellerini yönetin.
                 </p>
 
-                <a href="{{ route('urunler.index') }}" class="buton buton-birincil">
-                    Ürünleri Yönet
+                <a href="{{ auth()->user()->can('viewAny', App\Models\Product::class) ? route('urunler.index') : route('urunler.create') }}" class="buton buton-birincil">
+                    {{ auth()->user()->can('viewAny', App\Models\Product::class) ? 'Ürünleri Yönet' : 'Ürün Ekle' }}
                 </a>
             </article>
-        @endcan
+        @endcanany
 
-        @can('viewAny', App\Models\Order::class)
+        @canany(['viewAny', 'create'], App\Models\Order::class)
             <article class="kart">
                 <div class="kart-ikon">S</div>
 
@@ -57,13 +57,13 @@
                     Müşteri siparişlerini oluşturun ve ürün stoklarını takip edin.
                 </p>
 
-                <a href="{{ route('siparisler.index') }}" class="buton buton-birincil">
-                    Siparişleri Görüntüle
+                <a href="{{ auth()->user()->can('viewAny', App\Models\Order::class) ? route('siparisler.index') : route('siparisler.urun-sec') }}" class="buton buton-birincil">
+                    {{ auth()->user()->can('viewAny', App\Models\Order::class) ? 'Siparişleri Görüntüle' : 'Sipariş Oluştur' }}
                 </a>
             </article>
-        @endcan
+        @endcanany
 
-        @can('viewAny', App\Models\User::class)
+        @canany(['viewAny', 'create'], App\Models\User::class)
             <article class="kart">
                 <div class="kart-ikon">P</div>
 
@@ -73,8 +73,24 @@
                     Panel kullanıcılarını ekleyin ve rollerini belirleyin.
                 </p>
 
-                <a href="{{ route('kullanicilar.index') }}" class="buton buton-birincil">
-                    Kullanıcıları Yönet
+                <a href="{{ auth()->user()->can('viewAny', App\Models\User::class) ? route('kullanicilar.index') : route('kullanicilar.create') }}" class="buton buton-birincil">
+                    {{ auth()->user()->can('viewAny', App\Models\User::class) ? 'Kullanıcıları Yönet' : 'Kullanıcı Ekle' }}
+                </a>
+            </article>
+        @endcanany
+
+        @can('viewAny', App\Models\Role::class)
+            <article class="kart">
+                <div class="kart-ikon">R</div>
+
+                <h2>Roller ve Yetkiler</h2>
+
+                <p>
+                    Yeni roller oluşturun ve kullanıcıların erişebileceği işlemleri belirleyin.
+                </p>
+
+                <a href="{{ route('roller.index') }}" class="buton buton-birincil">
+                    Rolleri Yönet
                 </a>
             </article>
         @endcan

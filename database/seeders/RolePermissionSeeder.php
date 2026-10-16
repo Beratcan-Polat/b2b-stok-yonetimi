@@ -30,16 +30,30 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($izinler as $ad => $etiket) {
-            Permission::firstOrCreate(['name' => $ad], ['label' => $etiket]);
+            Permission::updateOrCreate(
+                ['name' => $ad],
+                ['label' => $etiket],
+            );
         }
 
-        $roller = [
-            'admin' => [
-                'label' => 'Sistem Yöneticisi',
-                'izinler' => array_keys($izinler),
-            ],
+        $superAdminRolu = Role::firstOrCreate(
+            ['name' => 'super-admin'],
+            ['label' => 'Süper Admin'],
+        );
+
+        $superAdminRolu->forceFill([
+            'label' => 'Süper Admin',
+            'is_super_admin' => true,
+        ])->save();
+
+        $superAdminRolu->permissions()->sync(
+            Permission::pluck('id'),
+        );
+
+        $varsayilanRoller = [
             'depo' => [
                 'label' => 'Depo Sorumlusu',
+
                 'izinler' => [
                     'urun.listele',
                     'urun.ekle',
@@ -49,16 +63,20 @@ class RolePermissionSeeder extends Seeder
                     'urun.geriyukle',
                 ],
             ],
+
             'satis' => [
                 'label' => 'Satış Temsilcisi',
+
                 'izinler' => [
                     'urun.listele',
                     'siparis.listele',
                     'siparis.olustur',
                 ],
             ],
+
             'bayi' => [
                 'label' => 'Bayi',
+
                 'izinler' => [
                     'urun.listele',
                     'siparis.olustur',
@@ -66,12 +84,20 @@ class RolePermissionSeeder extends Seeder
             ],
         ];
 
-        foreach ($roller as $ad => $bilgi) {
-            $rol = Role::firstOrCreate(['name' => $ad], ['label' => $bilgi['label']]);
-
-            $rol->permissions()->sync(
-                Permission::whereIn('name', $bilgi['izinler'])->pluck('id')
+        foreach ($varsayilanRoller as $ad => $bilgi) {
+            $rol = Role::firstOrCreate(
+                ['name' => $ad],
+                ['label' => $bilgi['label']],
             );
+
+            if ($rol->wasRecentlyCreated) {
+                $izinIdleri = Permission::whereIn(
+                    'name',
+                    $bilgi['izinler'],
+                )->pluck('id');
+
+                $rol->permissions()->sync($izinIdleri);
+            }
         }
     }
 }

@@ -5,34 +5,41 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(): View
     {
         Gate::authorize('viewAny', Product::class);
 
-        $arama = $request->input('search');
-        $kategoriId = $request->input('category_id');
-
-        $urunSorgusu = Product::with('category');
-
-        if ($arama) {
-            $urunSorgusu->where('name', 'like', '%' . $arama . '%');
-        }
-
-        if ($kategoriId) {
-            $urunSorgusu->where('category_id', $kategoriId);
-        }
-
-        $urunler = $urunSorgusu->latest()->paginate(10)->withQueryString();
-
         $kategoriler = Category::orderBy('name')->get();
 
-        return view('urunler.index', compact('urunler', 'kategoriler'));
+        return view('urunler.index', compact('kategoriler'));
+    }
+
+    public function veri(): JsonResponse
+    {
+        Gate::authorize('viewAny', Product::class);
+
+        $urunler = Product::with('category')->latest()->get();
+
+        $veriler = $urunler->map(function (Product $urun): array {
+            return [
+                'image' => view('urunler._image', ['urun' => $urun])->render(),
+                'name' => $urun->name,
+                'sku' => $urun->sku,
+                'category_name' => $urun->category?->name ?? 'Silinmiş kategori',
+                'price' => (float) $urun->price,
+                'stock' => $urun->stock,
+                'actions' => view('urunler._actions', ['urun' => $urun])->render(),
+            ];
+        });
+
+        return response()->json(['data' => $veriler]);
     }
 
     public function create()
@@ -63,7 +70,9 @@ class ProductController extends Controller
             'image_path' => $gorselYolu,
         ]);
 
-        return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla eklendi.');
+        $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', 'Ürün başarıyla eklendi.');
     }
 
     public function edit(Product $urun)
@@ -110,13 +119,33 @@ class ProductController extends Controller
         return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla silindi.');
     }
 
-    public function silinenler()
+    public function silinenler(): View
     {
         Gate::authorize('viewTrashed', Product::class);
 
-        $urunler = Product::onlyTrashed()->with('category')->latest('deleted_at')->paginate(10);
+        return view('urunler.silinenler');
+    }
 
-        return view('urunler.silinenler', compact('urunler'));
+    public function silinenlerVeri(): JsonResponse
+    {
+        Gate::authorize('viewTrashed', Product::class);
+
+        $urunler = Product::onlyTrashed()->with('category')->latest('deleted_at')->get();
+
+        $veriler = $urunler->map(function (Product $urun): array {
+            return [
+                'image' => view('urunler._image', ['urun' => $urun])->render(),
+                'name' => $urun->name,
+                'sku' => $urun->sku,
+                'category_name' => $urun->category?->name ?? 'Silinmiş kategori',
+                'stock' => $urun->stock,
+                'deleted_at' => $urun->deleted_at->toIso8601String(),
+                'deleted_at_display' => $urun->deleted_at->format('d.m.Y H:i'),
+                'actions' => view('urunler._restore_action', ['urun' => $urun])->render(),
+            ];
+        });
+
+        return response()->json(['data' => $veriler]);
     }
 
     public function geriYukle($id)

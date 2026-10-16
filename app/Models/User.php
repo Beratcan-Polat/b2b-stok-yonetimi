@@ -17,8 +17,6 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    private ?array $izinler = null;
-
     protected function casts(): array
     {
         return [
@@ -32,6 +30,16 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->roles()->where('is_super_admin', true)->exists();
+    }
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class)->withPivot('allowed');
+    }
+
     public function hasRole(string $rol): bool
     {
         return $this->roles->contains('name', $rol);
@@ -39,17 +47,20 @@ class User extends Authenticatable
 
     public function hasPermissionTo(string $izin): bool
     {
-        if ($this->izinler === null) {
-            $this->izinler = $this->roles()
-                ->with('permissions')
-                ->get()
-                ->pluck('permissions')
-                ->flatten()
-                ->pluck('name')
-                ->unique()
-                ->all();
+        if ($this->isSuperAdmin()) {
+            return true;
         }
 
-        return in_array($izin, $this->izinler);
+        $overrides = $this->permissions()->get()->mapWithKeys(
+            fn (Permission $permission) => [$permission->name => (bool) $permission->pivot->allowed],
+        )->all();
+
+        $rolePermissions = Permission::whereHas(
+            'roles.users', fn ($query) => $query->where('users.id', $this->id),
+        )->pluck('name')->all();
+
+        return array_key_exists($izin, $overrides)
+            ? $overrides[$izin]
+            : in_array($izin, $rolePermissions, true);
     }
 }

@@ -18,11 +18,19 @@ class UserPolicy
 
     public function update(User $user, User $hedef): bool
     {
+        if ($hedef->isSuperAdmin()) {
+            return false;
+        }
+
         return $user->hasPermissionTo('kullanici.duzenle');
     }
 
     public function delete(User $user, User $hedef): bool
     {
+        if ($hedef->isSuperAdmin()) {
+            return false;
+        }
+
         return $user->hasPermissionTo('kullanici.sil');
     }
 }

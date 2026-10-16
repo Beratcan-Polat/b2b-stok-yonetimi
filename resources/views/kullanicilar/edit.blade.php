@@ -58,6 +58,8 @@
                 @foreach ($roller as $rol)
                     <option
                         value="{{ $rol->id }}"
+                        data-permissions='@json($rol->permissions->modelKeys())'
+                        data-super-admin="{{ $rol->isSuperAdmin() ? '1' : '0' }}"
                         @selected(old('role_id', $kullanici->roles->first()?->id) == $rol->id)
                     >
                         {{ $rol->label }}
@@ -74,29 +76,33 @@
             @endif
         </div>
 
-        <div class="form-grup">
-            <label for="password">Yeni Parola</label>
+        @include('kullanicilar._permissions')
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-            >
+        @if (auth()->user()->isSuperAdmin())
+            <div class="form-grup">
+                <label for="password">Yeni Parola</label>
 
-            <small class="form-aciklama">
-                Parolayı değiştirmek istemiyorsanız boş bırakın. En az 8 karakter.
-            </small>
-        </div>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                >
 
-        <div class="form-grup">
-            <label for="password_confirmation">Yeni Parola Tekrarı</label>
+                <small class="form-aciklama">
+                    Parolayı değiştirmek istemiyorsanız boş bırakın. En az 8 karakter.
+                </small>
+            </div>
 
-            <input
-                type="password"
-                id="password_confirmation"
-                name="password_confirmation"
-            >
-        </div>
+            <div class="form-grup">
+                <label for="password_confirmation">Yeni Parola Tekrarı</label>
+
+                <input
+                    type="password"
+                    id="password_confirmation"
+                    name="password_confirmation"
+                >
+            </div>
+        @endif
 
         <div class="form-butonlari">
             <button type="submit" class="buton buton-birincil">

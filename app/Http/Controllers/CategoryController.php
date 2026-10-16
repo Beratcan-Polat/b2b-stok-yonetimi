@@ -4,18 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(): View
+    {
+        Gate::authorize('viewAny', Category::class);
+
+        return view('kategoriler.index');
+    }
+
+    public function veri(): JsonResponse
     {
         Gate::authorize('viewAny', Category::class);
 
         $kategoriler = Category::withCount('products')->latest()->get();
 
-        return view('kategoriler.index', compact('kategoriler'));
+        $veriler = $kategoriler->map(function (Category $kategori): array {
+            return [
+                'id' => $kategori->id,
+                'name' => $kategori->name,
+                'slug' => $kategori->slug,
+                'products_count' => $kategori->products_count,
+                'actions' => view('kategoriler._actions', [
+                    'kategori' => $kategori,
+                ])->render(),
+            ];
+        });
+
+        return response()->json(['data' => $veriler]);
+
     }
 
     public function create()
@@ -42,7 +64,9 @@ class CategoryController extends Controller
             'slug' => $slug,
         ]);
 
-        return redirect()->route('kategoriler.index')->with('success', 'Kategori başarıyla eklendi.');
+        $donus = Gate::allows('viewAny', Category::class) ? 'kategoriler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', 'Kategori başarıyla eklendi.');
     }
 
     public function edit(Category $kategori)
@@ -80,12 +104,8 @@ class CategoryController extends Controller
     {
         Gate::authorize('delete', $kategori);
 
-        if ($kategori->products()->exists()) {
-            return redirect()->route('kategoriler.index')->with('error', 'Bu kategoriye bağlı ürünler bulunduğu için kategori silinemez.');
-        }
-
         $kategori->delete();
 
-        return redirect()->route('kategoriler.index')->with('success', 'Kategori başarıyla silindi.');
+        return redirect()->route('kategoriler.index')->with('success', 'Kategori ve bağlı ürünler başarıyla silindi.');
     }
 }

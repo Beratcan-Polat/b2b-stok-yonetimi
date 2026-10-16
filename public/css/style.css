@@ -19,23 +19,119 @@ a {
     color: inherit;
 }
 
+.icerige-gec {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    padding: 9px 14px;
+    transform: translateY(-150%);
+    background-color: #ffffff;
+    color: #16324f;
+    font-weight: 700;
+}
+
+.icerige-gec:focus {
+    transform: translateY(0);
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid #176b87;
+    outline-offset: 3px;
+}
+
 .kapsayici {
     width: min(1180px, calc(100% - 40px));
     margin: 0 auto;
 }
 
-.ust-alan {
+.panel-duzeni {
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    min-height: 100dvh;
+}
+
+.misafir-duzeni {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.panel-ana-alan {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 100dvh;
+}
+
+.yan-menu {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100dvh;
+    overflow-y: auto;
+    padding: 28px 16px;
     background-color: #16324f;
     color: #ffffff;
-    box-shadow: 0 2px 8px rgba(22, 50, 79, 0.18);
+}
+
+.yan-menu-baslik {
+    padding-bottom: 26px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.yan-menu-logo {
+    display: block;
+    padding: 0 12px;
+    line-height: 1.3;
+}
+
+.menu-dugmesi {
+    display: none;
+}
+
+.ust-alan {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    color: #16324f;
+}
+
+.misafir-duzeni .ust-alan {
+    background-color: #16324f;
+    color: #ffffff;
 }
 
 .ust-menu {
     min-height: 70px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 30px;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 12px 32px;
+}
+
+.misafir-duzeni .ust-menu {
+    justify-content: flex-start;
+}
+
+.kullanici-bilgi {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    margin-right: 8px;
+    padding: 6px 12px;
+    border: 1px solid #cfd7e2;
+    border-radius: 7px;
+    background-color: #f5f7f9;
+    color: #16324f;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-decoration: none;
+}
+
+.kullanici-bilgi:hover {
+    border-color: #176b87;
+    background-color: #e8f2f5;
 }
 
 .logo {
@@ -47,22 +143,36 @@ a {
 
 .menu {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 24px;
 }
 
 .menu a,
 .pasif-menu {
-    display: inline-block;
-    padding: 9px 13px;
-    border-radius: 6px;
+    display: block;
+    padding: 11px 13px;
+    border-radius: 8px;
     color: #ffffff;
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
 }
 
-.menu a:hover {
+.menu a:hover,
+.menu a:focus-visible {
     background-color: rgba(255, 255, 255, 0.12);
+}
+
+.menu a:focus-visible,
+.menu-dugmesi:focus-visible,
+.yan-menu-logo:focus-visible {
+    outline-color: #ffffff;
+}
+
+.menu a.aktif {
+    background-color: rgba(255, 255, 255, 0.18);
+    font-weight: 700;
+    box-shadow: inset 3px 0 0 #92d2e3;
 }
 
 .pasif-menu {
@@ -71,7 +181,7 @@ a {
 }
 
 .ana-icerik {
-    min-height: calc(100vh - 145px);
+    flex: 1;
     padding-top: 42px;
     padding-bottom: 60px;
 }
@@ -200,6 +310,15 @@ a {
     background-color: #dbe2e9;
 }
 
+.buton-cikis {
+    background-color: #f40000;
+    color: #ffffff;
+}
+
+.buton-cikis:hover {
+    background-color: #ff3636;
+}
+
 .buton-tehlike {
     background-color: #c63d3d;
     color: #ffffff;
@@ -273,6 +392,38 @@ th {
     font-size: 13px;
 }
 
+.tablo-kapsayici table.dataTable thead th,
+.tablo-kapsayici table.dataTable tbody td {
+    text-align: left;
+}
+
+.tablo-kapsayici table.dataTable thead th .dt-column-header {
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tablo-kapsayici table.dataTable thead th .dt-column-title {
+    text-align: left;
+}
+
+.tablo-kapsayici table.dataTable thead th .dtcc {
+    margin-left: auto;
+}
+
+.tablo-kapsayici table.dataTable {
+    --dt-row_background-selected: 220, 236, 247;
+    --dt-row-text_color-selected: 37, 48, 68;
+    --dt-row-link_color-selected: 52, 64, 84;
+    --dt_background-selected: 220, 236, 247;
+    --dt_color-selected: 37, 48, 68;
+    --dt_link_color-selected: 52, 64, 84;
+}
+
+.tablo-kapsayici table.dataTable > tbody > tr.selected a.buton-birincil,
+.tablo-kapsayici table.dataTable > tbody > tr.selected a.buton-tehlike {
+    color: #ffffff;
+}
+
 tr:last-child td {
     border-bottom: 0;
 }
@@ -288,16 +439,12 @@ tr:last-child td {
 }
 
 @media (max-width: 800px) {
-    .ust-menu {
-        padding: 16px 0;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+    .panel-duzeni {
+        grid-template-columns: 210px minmax(0, 1fr);
     }
 
-    .menu {
-        width: 100%;
-        overflow-x: auto;
+    .misafir-duzeni {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .kart-grid {
@@ -314,6 +461,66 @@ tr:last-child td {
     }
 }
 
+@media (max-width: 700px) {
+    .panel-duzeni {
+        display: block;
+    }
+
+    .yan-menu {
+        position: static;
+        height: auto;
+        padding: 18px 16px;
+    }
+
+    .yan-menu-baslik {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
+
+    .yan-menu-logo {
+        padding: 0;
+        font-size: 18px;
+    }
+
+    .menu-dugmesi {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 7px;
+        background-color: transparent;
+        color: #ffffff;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .menu-dugmesi:hover {
+        background-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .menu {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .yan-menu.menu-hazir .menu:not(.mobil-acik) {
+        display: none;
+    }
+
+    .ust-menu {
+        min-height: 62px;
+        padding: 12px 20px;
+    }
+}
+
 @media (max-width: 520px) {
     .kapsayici {
         width: min(100% - 24px, 1180px);
@@ -327,10 +534,13 @@ tr:last-child td {
         font-size: 25px;
     }
 
-    .menu a,
-    .pasif-menu {
-        padding: 8px 10px;
-        white-space: nowrap;
+    .ust-menu {
+        flex-wrap: wrap;
+        gap: 8px 12px;
+    }
+
+    .kullanici-bilgi {
+        overflow-wrap: anywhere;
     }
 }
 
@@ -492,7 +702,8 @@ tr:last-child td {
 
 .filtre-alanlari {
     display: grid;
-    grid-template-columns: minmax(220px, 2fr) minmax(180px, 1fr) auto;
+    grid-template-columns: minmax(220px, 390px) auto;
+    justify-content: start;
     align-items: end;
     gap: 15px;
 }
@@ -505,14 +716,6 @@ tr:last-child td {
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.sonuc-bilgisi {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px solid #e8edf2;
-    color: #667085;
-    font-size: 13px;
 }
 
 @media (max-width: 750px) {
@@ -657,4 +860,90 @@ tr:last-child td {
     color: #667085;
     font-size: 13px;
     line-height: 1.7;
+}
+
+
+/* İzin checkbox'ı ve açıklamasını yan yana yerleştirir. */
+.form-grup label.izin-secimi {
+    display: flex;
+
+    /* Checkbox ile metni dikey olarak ortalar. */
+    align-items: center;
+
+    /* Checkbox ile metin arasında küçük bir boşluk bırakır. */
+    gap: 8px;
+
+    /* İzin satırları arasındaki mesafeyi belirler. */
+    margin-bottom: 8px;
+
+    /* Uzun açıklamalarda okunabilir satır yüksekliği sağlar. */
+    line-height: 1.5;
+
+    /* Metne tıklanarak da seçim yapılabileceğini gösterir. */
+    cursor: pointer;
+}
+
+/* Genel input stillerinin checkbox'ı genişletmesini engeller. */
+.form-grup label.izin-secimi input[type="checkbox"] {
+    /* Checkbox'ın küçük ve sabit boyutta kalmasını sağlar. */
+    width: 16px;
+    height: 16px;
+
+    /* Flex düzeninde checkbox'ın küçülmesini engeller. */
+    flex-shrink: 0;
+
+    /* Tarayıcı ve genel form kurallarından gelen boşlukları kaldırır. */
+    margin: 0;
+    padding: 0;
+
+    /* Seçili checkbox rengini mevcut tasarımla eşleştirir. */
+    accent-color: #176b87;
+}
+.kullanici-yetkileri {
+    margin: 24px 0;
+}
+
+.kullanici-yetki-alanlari {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+.kullanici-yetki-alanlari[hidden] {
+    display: none;
+}
+
+.kullanici-yetki-grubu {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 16px 0;
+    min-width: 0;
+}
+
+.kullanici-yetki-grubu legend {
+    font-weight: 700;
+    padding: 0 6px;
+}
+
+.kullanici-yetki-grubu label.kullanici-yetki-satiri {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.kullanici-yetki-grubu .kullanici-yetki-satiri input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    margin: 0;
+    padding: 0;
+    accent-color: #176b87;
 }
