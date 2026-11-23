@@ -29,16 +29,19 @@ class CategoryRequest extends FormRequest
                 'max:255',
                 Rule::unique('categories', 'name')->ignore($kategori),
             ],
+            'name_en' => ['nullable', 'string', 'max:255'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Kategori adı zorunludur.',
-            'name.string' => 'Kategori adı metin olmalıdır.',
-            'name.max' => 'Kategori en fazla 255 karakter olabilir.',
-            'name.unique' => 'Bu kategori adı daha önce kullanıldı.',
+            'name.required' => __('panel.validation.category.name-required'),
+            'name.string' => __('panel.validation.category.name-string'),
+            'name.max' => __('panel.validation.category.name-max'),
+            'name.unique' => __('panel.validation.category.name-unique'),
+            'name_en.string' => __('panel.validation.category.name-en-string'),
+            'name_en.max' => __('panel.validation.category.name-en-max'),
         ];
     }
 }

@@ -24,9 +24,9 @@ class LoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'email.required' => 'E-posta adresi zorunludur.',
-            'email.email' => 'Geçerli bir e-posta adresi giriniz.',
-            'password.required' => 'Parola zorunludur.',
+            'email.required' => __('panel.validation.login.email-required'),
+            'email.email' => __('panel.validation.login.email-email'),
+            'password.required' => __('panel.validation.login.password-required'),
         ];
     }
 
@@ -34,7 +34,7 @@ class LoginRequest extends FormRequest
     {
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => 'Girdiğiniz bilgilere göre kullanıcı bulunamadı.',
+                'email' => __('panel.validation.login.email'),
             ]);
         }
 

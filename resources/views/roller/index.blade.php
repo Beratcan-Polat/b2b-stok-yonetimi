@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Roller ve Yetkiler')
+@section('title', __('panel.roles'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -11,30 +11,32 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div>
-            <h1>Roller ve Yetkiler</h1>
-            <p>Kullanıcı rollerini ve bu rollerin erişebileceği işlemleri yönetin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.roles') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.roles-description') }}</p>
         </div>
 
         @can('create', App\Models\Role::class)
-            <a href="{{ route('roller.create') }}" class="buton buton-birincil">Yeni Rol Ekle</a>
+            <a href="{{ route('roller.create') }}" class="btn btn-primary align-self-start">{{ __('panel.new-role') }}</a>
         @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="roller-tablosu">
-            <thead>
-                <tr>
-                    <th>Rol Adı</th>
-                    <th>Rol Kodu</th>
-                    <th>Kullanıcı Sayısı</th>
-                    <th>İzin Sayısı</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="roller-tablosu" class="table table-hower w-100">
+                <thead>
+                    <tr>
+                        <th>{{ __('panel.role-name') }}</th>
+                        <th>{{ __('panel.role-code') }}</th>
+                        <th>{{ __('panel.user-count') }}</th>
+                        <th>{{ __('panel.permission-count') }}</th>
+                        <th>{{ __('panel.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -58,7 +60,7 @@
                     top1Start: {
                         buttons: [{
                                 extend: 'copy',
-                                text: 'Kopyala',
+                                text: {{ Js::from(__('panel.copy')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3]
                                 }
@@ -86,14 +88,14 @@
                             },
                             {
                                 extend: 'print',
-                                text: 'Tümünü Yazdır',
+                                text: {{ Js::from(__('panel.print-all')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3]
                                 }
                             },
                             {
                                 extend: 'selectNone',
-                                text: 'Seçimi Temizle'
+                                text: {{ Js::from(__('panel.clear-selection')) }}
                             }
                         ]
                     }
@@ -117,7 +119,7 @@
                             }
 
                             const aciklama = satir.is_super_admin ?
-                                '<div class="urun-alt-bilgi">Korumalı sistem rolü</div>' :
+                                '<div class="urun-alt-bilgi">' + {{ Js::from(__('panel.protected-role')) }} + '</div>' :
                                 '';
 
                             return '<strong>' + guvenliMetin(veri) + '</strong>' + aciklama;
@@ -138,7 +140,7 @@
                         data: 'permissions_count',
                         render: function(veri, tur, satir) {
                             return (tur === 'display' || tur === 'filter') && satir.is_super_admin ?
-                                'Tüm yetkiler' :
+                                {{ Js::from(__('panel.all-permissions')) }} :
                                 veri;
                         }
                     },
@@ -151,16 +153,9 @@
                 ],
                 order: [],
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen rol bulunamadı.',
-                    emptyTable: 'Henüz rol bulunmuyor.',
-                    paginate: {
-                        previous: 'Önceki',
-                        next: 'Sonraki'
-                    }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-roles')) }},
+                    emptyTable: {{ Js::from(__('panel.no-roles')) }}
                 }
             });
         });

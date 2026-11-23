@@ -1,0 +1,909 @@
+.magaza {
+    --magaza-mavi: #2854ed;
+    --magaza-mavi-koyu: #163bb8;
+    --magaza-metin: #182239;
+    --magaza-soluk: #657086;
+    --magaza-cizgi: #e4e8f0;
+    margin: 0;
+    background: #f6f8fc;
+    color: var(--magaza-metin);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.magaza a {
+    text-underline-offset: 4px;
+}
+
+.magaza a:focus-visible,
+.magaza button:focus-visible,
+.magaza input:focus-visible,
+.magaza select:focus-visible {
+    outline: 3px solid var(--magaza-mavi);
+    outline-offset: 4px;
+}
+
+.magaza-kapsayici {
+    width: min(1320px, calc(100% - 80px));
+    margin-inline: auto;
+}
+
+.magaza-icerige-gec {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    padding: 12px 18px;
+    transform: translateY(-180%);
+    background: #fff;
+    border: 1px solid var(--magaza-mavi);
+    border-radius: 8px;
+}
+
+.magaza-icerige-gec:focus {
+    transform: translateY(0);
+}
+
+.magaza-baslik {
+    background: #fff;
+    border-bottom: 1px solid var(--magaza-cizgi);
+}
+
+.magaza-ust-menu {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr) 138px;
+    align-items: center;
+    gap: 32px;
+    min-height: 92px;
+}
+
+.magaza-marka {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    color: var(--magaza-metin);
+    text-decoration: none;
+}
+
+.magaza-marka:hover {
+    color: var(--magaza-mavi);
+    text-decoration: none;
+}
+
+.magaza-marka-isaret {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: 14px 14px 14px 3px;
+    background: var(--magaza-mavi);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+}
+
+.magaza-marka-adi,
+.magaza-marka-aciklama {
+    display: block;
+}
+
+.magaza-marka-adi {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.magaza-marka-aciklama {
+    margin-top: 3px;
+    color: var(--magaza-soluk);
+    font-size: 11px;
+}
+
+.magaza-arama {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+    background: #f5f7fb;
+    border: 1px solid var(--magaza-cizgi);
+    border-radius: 12px;
+    min-width: 0;
+}
+
+.magaza-arama input[type="search"] {
+    min-width: 0;
+    width: 100%;
+    height: 36px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--magaza-metin);
+    font-size: 13px;
+}
+
+.magaza-arama input::placeholder {
+    color: var(--magaza-soluk);
+}
+
+.magaza-arama button {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: 8px 16px;
+    background: var(--magaza-mavi);
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.magaza-arama button:hover,
+.magaza-dugme:hover {
+    background: var(--magaza-mavi-koyu);
+    color: #fff;
+    text-decoration: none;
+}
+
+.magaza-dil {
+    justify-self: end;
+}
+
+.magaza-dil .form-select {
+    width: 118px;
+    min-height: 42px;
+    border: 1px solid var(--magaza-cizgi);
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.magaza-kategori-menu {
+    border-top: 1px solid #f0f2f7;
+}
+
+.magaza-kategori-baglantilar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 62px;
+    overflow-x: auto;
+    padding-block: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #c2cceb transparent;
+}
+
+.magaza-kategori-baglantisi {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #4b566e;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.magaza-kategori-baglantisi:hover {
+    color: var(--magaza-mavi);
+    background: #eff3ff;
+    text-decoration: none;
+}
+
+.magaza-kategori-baglantisi.aktif {
+    background: #eaf0ff;
+    color: #2046cb;
+    font-weight: 600;
+}
+
+.magaza-icerik {
+    flex: 1;
+    padding-block: 28px 64px;
+}
+
+.magaza-tanitim {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    min-height: 300px;
+    overflow: hidden;
+    margin-bottom: 36px;
+    border-radius: 22px;
+    background: var(--magaza-mavi);
+}
+
+.magaza-tanitim-metni {
+    align-self: center;
+    padding: 32px 40px;
+}
+
+.magaza-ust-etiket {
+    display: inline-block;
+    margin: 0 0 14px;
+    color: #e0e8ff;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.magaza-tanitim h1 {
+    max-width: 520px;
+    margin: 0 0 14px;
+    color: #fff;
+    font-size: clamp(34px, 3.7vw, 50px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -1.9px;
+    text-wrap: balance;
+}
+
+.magaza-aciklama {
+    max-width: 440px;
+    margin: 0 0 24px;
+    color: #e1e9ff;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.magaza-kesfet {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    padding: 11px 18px;
+    background: #fff;
+    border-radius: 9px;
+    color: #2146cc;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.magaza-kesfet:hover {
+    background: #eaf0ff;
+    color: #1538b4;
+    text-decoration: none;
+}
+
+.magaza-kesfet:focus-visible {
+    outline-color: #fff;
+}
+
+.magaza-kesfet span {
+    font-size: 19px;
+    line-height: 1;
+}
+
+.magaza-vitrin {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    padding: 24px 32px;
+    background: #e9eeff;
+}
+
+.magaza-vitrin-baglantisi {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    color: var(--magaza-metin);
+    text-decoration: none;
+}
+
+.magaza-vitrin-baglantisi:hover {
+    color: var(--magaza-mavi);
+    text-decoration: none;
+}
+
+.magaza-vitrin-gorsel {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-width: 0;
+}
+
+.magaza-vitrin-gorsel img {
+    width: 100%;
+    max-width: 280px;
+    height: 220px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+.magaza-vitrin-aciklama {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+    padding: 12px 16px;
+    background: #fff;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.magaza-vitrin-aciklama strong {
+    color: var(--magaza-mavi);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+}
+
+.magaza-vitrin-aciklama > span,
+.magaza-vitrin-aciklama strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.magaza-vitrin-bos {
+    text-align: center;
+    color: #3858b0;
+}
+
+.magaza-vitrin-bos > span {
+    display: block;
+    color: #b4c4f4;
+    font-size: 92px;
+    font-weight: 700;
+    letter-spacing: -6px;
+}
+
+.magaza-vitrin-bos p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.magaza-liste-basligi {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 28px;
+    margin-bottom: 24px;
+}
+
+.magaza-liste-ozeti {
+    flex-shrink: 0;
+}
+
+.magaza-liste-basligi h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    color: var(--magaza-metin);
+    font-size: 25px;
+    font-weight: 650;
+    letter-spacing: -.6px;
+    scroll-margin-top: 24px;
+}
+
+.magaza-liste-basligi h2 span {
+    display: inline-grid;
+    place-items: center;
+    min-width: 29px;
+    padding: 4px 7px;
+    background: #e8edfa;
+    border-radius: 7px;
+    color: #3b548b;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.magaza-temizle {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--magaza-mavi);
+    font-size: 11px;
+}
+
+.magaza-filtreler {
+    display: grid;
+    grid-template-columns: minmax(220px, 280px) auto;
+    align-items: end;
+    gap: 12px;
+    min-width: 0;
+}
+
+.magaza-filtreler .form-label {
+    margin-bottom: 6px;
+    color: var(--magaza-soluk);
+    font-size: 11px;
+}
+
+.magaza-filtreler .form-select {
+    min-height: 42px;
+    border: 1px solid #dce2ee;
+    border-radius: 9px;
+    font-size: 12px;
+    color: var(--magaza-metin);
+}
+
+.magaza-dugme {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 16px;
+    background: var(--magaza-mavi);
+    border: 1px solid var(--magaza-mavi);
+    border-radius: 9px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.magaza-urunler {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.magaza-urun {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #e7ebf3;
+    border-radius: 16px;
+}
+
+.magaza-gorsel-alani {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #eff2f8;
+}
+
+.magaza-urun-gorseli {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 28px;
+    object-fit: contain;
+    background: #fff;
+}
+
+.magaza-stok-durumu {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 1;
+    padding: 5px 10px;
+    background: #e8efff;
+    border-radius: 6px;
+    color: #2449b9;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.magaza-stok-yok {
+    background: #f8e9ec;
+    color: #9a3f51;
+}
+
+.magaza-gorsel-yok {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--magaza-soluk);
+}
+
+.magaza-gorsel-yok > span {
+    color: #c3cfe4;
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -3px;
+    line-height: 1.2;
+}
+
+.magaza-gorsel-yok p {
+    margin: 6px 0 0;
+    font-size: 11px;
+}
+
+.magaza-urun-bilgileri {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 22px;
+}
+
+.magaza-urun-kategori {
+    margin: 0 0 7px;
+    color: var(--magaza-mavi);
+    font-size: 11px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.magaza-urun h3 {
+    margin: 0 0 7px;
+    color: var(--magaza-metin);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -.3px;
+    overflow-wrap: anywhere;
+    scroll-margin-top: 24px;
+}
+
+.magaza-urun-kodu {
+    margin: 0 0 20px;
+    color: var(--magaza-soluk);
+    font-size: 10px;
+    overflow-wrap: anywhere;
+}
+
+.magaza-urun-alt {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-top: 16px;
+    margin: auto 0 0;
+    border-top: 1px solid #edf0f6;
+    font-variant-numeric: tabular-nums;
+}
+
+.magaza-urun-alt dt {
+    margin-bottom: 4px;
+    color: var(--magaza-soluk);
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.magaza-urun-alt dd {
+    margin: 0;
+    color: var(--magaza-metin);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.magaza-fiyat {
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -.9px;
+}
+
+.magaza-fiyat span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.magaza-stok-adedi {
+    margin-left: auto;
+    text-align: right;
+}
+
+.magaza-stok-adedi dd {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.magaza-stok-adedi dd span {
+    color: var(--magaza-soluk);
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.magaza-bos-durum {
+    grid-column: 1 / -1;
+    padding: 64px 24px;
+    border: 1px solid var(--magaza-cizgi);
+    border-radius: 16px;
+    background: #fff;
+    text-align: center;
+}
+
+.magaza-bos-isaret {
+    display: block;
+    margin-bottom: 16px;
+    color: #b9c9f8;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -3px;
+}
+
+.magaza-bos-durum h3 {
+    color: var(--magaza-metin);
+    font-size: 21px;
+}
+
+.magaza-bos-durum p {
+    color: var(--magaza-soluk);
+    margin: 12px 0 24px;
+    font-size: 13px;
+}
+
+.magaza-sayfalama {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.magaza-sayfalama > p {
+    margin: 0;
+    color: var(--magaza-soluk);
+    font-size: 12px;
+}
+
+.magaza-sayfa-dugmeleri {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.magaza-sayfa-dugmesi {
+    padding: 9px 15px;
+    border: 1px solid #dce2ee;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--magaza-metin);
+    text-decoration: none;
+}
+
+a.magaza-sayfa-dugmesi:hover {
+    color: var(--magaza-mavi);
+    border-color: var(--magaza-mavi);
+    text-decoration: none;
+}
+
+.magaza-sayfa-dugmesi[aria-disabled="true"] {
+    color: #697184;
+    background: #eef1f6;
+}
+
+.magaza-sayfa-numarasi {
+    color: var(--magaza-mavi);
+    font-weight: 600;
+}
+
+.magaza-alt-alan {
+    background: #fff;
+    border-top: 1px solid var(--magaza-cizgi);
+}
+
+.magaza-alt-icerik {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--magaza-soluk);
+    font-size: 12px;
+}
+
+.magaza-alt-icerik a {
+    color: var(--magaza-mavi);
+    text-decoration: none;
+}
+
+.magaza-alt-marka {
+    color: var(--magaza-metin) !important;
+    font-weight: 600;
+}
+
+.magaza .alert {
+    border-radius: 12px;
+}
+
+@media (max-width: 1099.98px) {
+    .magaza-kapsayici {
+        width: calc(100% - 48px);
+    }
+
+    .magaza-ust-menu {
+        grid-template-columns: 210px minmax(0, 1fr) 118px;
+        gap: 20px;
+    }
+
+    .magaza-marka-adi {
+        font-size: 13px;
+    }
+
+    .magaza-tanitim-metni {
+        padding: 30px;
+    }
+
+    .magaza-liste-basligi {
+        align-items: start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .magaza-filtreler {
+        width: 100%;
+        grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .magaza-urunler {
+        gap: 18px;
+    }
+
+    .magaza-urun-bilgileri {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 799.98px) {
+    .magaza-ust-menu {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        padding-block: 18px;
+    }
+
+    .magaza-arama {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+
+    .magaza-tanitim {
+        grid-template-columns: 1.1fr 1fr;
+    }
+
+    .magaza-tanitim h1 {
+        font-size: 35px;
+        letter-spacing: -1.2px;
+    }
+
+    .magaza-vitrin {
+        padding: 22px;
+    }
+
+    .magaza-vitrin-gorsel img {
+        height: 190px;
+    }
+
+    .magaza-vitrin-aciklama {
+        flex-direction: column;
+        align-items: start;
+        gap: 4px;
+    }
+
+    .magaza-urunler {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 599.98px) {
+    .magaza-kapsayici {
+        width: calc(100% - 32px);
+    }
+
+    .magaza-marka {
+        gap: 9px;
+    }
+
+    .magaza-marka-isaret {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px 11px 11px 3px;
+        font-size: 12px;
+    }
+
+    .magaza-marka-adi {
+        font-size: 12px;
+    }
+
+    .magaza-marka-aciklama {
+        font-size: 10px;
+    }
+
+    .magaza-dil .form-select {
+        width: 96px;
+        min-height: 38px;
+    }
+
+    .magaza-arama input[type="search"] {
+        padding-inline: 8px;
+        font-size: 12px;
+    }
+
+    .magaza-arama button {
+        padding-inline: 12px;
+        font-size: 11px;
+    }
+
+    .magaza-kategori-baglantilar {
+        gap: 4px;
+        min-height: 54px;
+    }
+
+    .magaza-kategori-baglantisi {
+        padding: 7px 12px;
+        font-size: 11px;
+    }
+
+    .magaza-icerik {
+        padding-block: 20px 40px;
+    }
+
+    .magaza-tanitim {
+        grid-template-columns: minmax(0, 1fr);
+        min-height: 0;
+        border-radius: 16px;
+        margin-bottom: 28px;
+    }
+
+    .magaza-tanitim-metni {
+        padding: 28px 24px;
+    }
+
+    .magaza-tanitim h1 {
+        max-width: 360px;
+        font-size: 35px;
+        letter-spacing: -1.2px;
+    }
+
+    .magaza-aciklama {
+        margin-bottom: 20px;
+    }
+
+    .magaza-vitrin {
+        display: none;
+    }
+
+    .magaza-liste-basligi h2 {
+        font-size: 23px;
+    }
+
+    .magaza-filtreler {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .magaza-filtreler .magaza-dugme {
+        grid-column: 1 / -1;
+    }
+
+    .magaza-filtreler .form-select {
+        font-size: 11px;
+        padding-left: 10px;
+    }
+
+    .magaza-urunler {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .magaza-urun-bilgileri {
+        padding: 22px;
+    }
+
+    .magaza-sayfalama {
+        justify-content: center;
+    }
+
+    .magaza-alt-icerik {
+        padding-block: 24px;
+        justify-content: center;
+        text-align: center;
+        font-size: 11px;
+    }
+
+    .magaza-alt-marka {
+        width: 100%;
+    }
+}

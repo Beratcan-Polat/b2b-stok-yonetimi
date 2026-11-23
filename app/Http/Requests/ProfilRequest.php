@@ -31,13 +31,13 @@ class ProfilRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'current_password.required' => 'Mevcut şifre alanı zorunludur.',
-            'current_password.string' => 'Mevcut şifre geçerli bir metin olmalıdır.',
-            'current_password.current_password' => 'Mevcut şifre yanlış.',
-            'password.required' => 'Yeni şifre alanı zorunludur.',
-            'password.string' => 'Yeni şifre geçerli bir metin olmalıdır.',
-            'password.min' => 'Yeni şifre en az :min karakter olmalıdır.',
-            'password.confirmed' => 'Yeni şifre ve onay alanı eşleşmiyor.',
+            'current_password.required' => __('panel.validation.profil.current_password-required'),
+            'current_password.string' => __('panel.validation.profil.current_password-string'),
+            'current_password.current_password' => __('panel.validation.profil.current_password-current_password'),
+            'password.required' => __('panel.validation.profil.password-required'),
+            'password.string' => __('panel.validation.profil.password-string'),
+            'password.min' => __('panel.validation.profil.password-min'),
+            'password.confirmed' => __('panel.validation.profil.password-confirmed'),
         ];
     }
 }

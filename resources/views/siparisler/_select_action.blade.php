@@ -1,3 +1,3 @@
-<a href="{{ route('siparisler.create', $urun) }}" class="buton buton-birincil buton-kucuk">
-    Sipariş Oluştur
+<a href="{{ route('siparisler.create', $urun) }}" class="btn btn-primary btn-sm text-nowrap">
+    {{ __('panel.create-order') }}
 </a>

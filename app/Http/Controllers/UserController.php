@@ -35,7 +35,7 @@ class UserController extends Controller
                 'id' => $kullanici->id,
                 'name' => $kullanici->name,
                 'email' => $kullanici->email,
-                'roles' => $kullanici->roles->pluck('label')->implode(', ') ?: 'Rol atanmamış',
+                'roles' => $kullanici->roles->pluck('label')->implode(', ') ?: __('panel.no-role'),
                 'is_current' => $kullanici->id === Auth::id(),
                 'actions' => view('kullanicilar._actions', [
                     'kullanici' => $kullanici,
@@ -108,7 +108,7 @@ class UserController extends Controller
 
         return redirect()
             ->route($donus)
-            ->with('success', 'Kullanıcı başarıyla eklendi.');
+            ->with('success', __('panel.user-created'));
     }
 
     public function edit(User $kullanici)
@@ -168,7 +168,7 @@ class UserController extends Controller
 
                     if ($superAdminSayisi <= 1) {
                         throw ValidationException::withMessages([
-                            'role_id' => 'Son Süper Admin normal bir role geçirilemez.',
+                            'role_id' => __('panel.last-admin-role'),
                         ]);
                     }
                 }
@@ -202,9 +202,11 @@ class UserController extends Controller
             }
         });
 
+        $donus = Gate::allows('viewAny', User::class) ? 'kullanicilar.index' : 'anasayfa';
+
         return redirect()
-            ->route('kullanicilar.index')
-            ->with('success', 'Kullanıcı başarıyla güncellendi.');
+            ->route($donus)
+            ->with('success', __('panel.user-updated'));
     }
 
     public function destroy(User $kullanici)
@@ -213,8 +215,8 @@ class UserController extends Controller
 
         if ($kullanici->id === Auth::id()) {
             return redirect()
-                ->route('kullanicilar.index')
-                ->with('error', 'Kendi hesabınızı silemezsiniz.');
+                ->route(Gate::allows('viewAny', User::class) ? 'kullanicilar.index' : 'anasayfa')
+                ->with('error', __('panel.cannot-delete-self'));
         }
 
         DB::transaction(function () use ($kullanici): void {
@@ -238,7 +240,7 @@ class UserController extends Controller
 
                 if ($superAdminSayisi <= 1) {
                     throw ValidationException::withMessages([
-                        'kullanici' => 'Son Süper Admin hesabı silinemez.',
+                        'kullanici' => __('panel.last-admin-delete'),
                     ]);
                 }
             }
@@ -256,9 +258,11 @@ class UserController extends Controller
             $hedefKullanici->delete();
         });
 
+        $donus = Gate::allows('viewAny', User::class) ? 'kullanicilar.index' : 'anasayfa';
+
         return redirect()
-            ->route('kullanicilar.index')
-            ->with('success', 'Kullanıcı başarıyla silindi.');
+            ->route($donus)
+            ->with('success', __('panel.user-deleted'));
 
     }
 
@@ -306,7 +310,7 @@ class UserController extends Controller
 
             if (! $permission) {
                 throw ValidationException::withMessages([
-                    'permission_overrides' => 'Seçilen izin bulunamadı.',
+                    'permission_overrides' => __('panel.permission-not-found'),
                 ]);
             }
 

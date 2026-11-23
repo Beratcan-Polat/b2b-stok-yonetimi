@@ -1,6 +1,6 @@
 @if (auth()->user()->isSuperAdmin())
     @php
-        $modulAdlari = ['kategori' => 'Kategoriler', 'urun' => 'Ürünler', 'siparis' => 'Siparişler', 'kullanici' => 'Kullanıcılar'];
+        $modulAdlari = ['kategori' => __('panel.categories'), 'urun' => __('panel.products'), 'siparis' => __('panel.orders'), 'kullanici' => __('panel.users'), 'tema' => __('tema.title')];
         $kayitliSecimler = isset($kullanici)
             ? $kullanici->permissions->mapWithKeys(fn ($izin) => [$izin->id => $izin->pivot->allowed ? 'allow' : 'deny'])->all()
             : [];
@@ -19,38 +19,40 @@
         $secilenIzinler = collect(old('user_permission_ids', []))->filter(fn ($id) => is_scalar($id))->map(fn ($id) => (string) $id)->all();
     @endphp
 
-    <section class="kullanici-yetkileri" data-user-permissions data-overrides='@json($kayitliSecimler)'>
-        <h2>Kullanıcıya Özel Yetkiler</h2>
-        <p class="form-aciklama">
-            Bu seçimler yalnızca bu kullanıcıyı etkiler. Aynı roldeki diğer kullanıcıların yetkileri değişmez.
-            Rolden gelen yetkiler işaretlidir. Ek yetki vermek için işaretleyin, bu kullanıcıdan kaldırmak için işareti kaldırın.
-            Her yetki bağımsızdır; birini seçmek başka bir yetkiyi otomatik açmaz.
+    <section class="mb-4 border-top pt-4" data-user-permissions data-overrides='@json($kayitliSecimler)'>
+        <h2 class="h5 mb-2">{{ __('panel.user-permissions') }}</h2>
+        <p class="text-muted mb-3">
+            {{ __('panel.user-permissions-help') }}
         </p>
 
-        <p class="form-aciklama" data-super-admin-note hidden>
-            Süper Admin bütün yetkilere sahiptir; kişisel kısıtlama uygulanmaz.
+        <p class="alert alert-info mb-0" data-super-admin-note hidden>
+            {{ __('panel.super-admin-permissions-help') }}
         </p>
 
-        <fieldset class="kullanici-yetki-alanlari" data-override-fields>
+        <fieldset class="border-0 p-0 m-0" data-override-fields>
             <input type="hidden" name="user_permissions_present" value="1">
-            @foreach ($izinGruplari as $modul => $izinler)
-                <fieldset class="kullanici-yetki-grubu">
-                    <legend>{{ $modulAdlari[$modul] ?? $modul }}</legend>
+            <div class="row g-3">
+                @foreach ($izinGruplari as $modul => $izinler)
+                    <div class="col-12 col-md-6">
+                        <fieldset class="border rounded p-3 h-100">
+                            <legend class="float-none w-auto px-2 fs-6 fw-bold">{{ $modulAdlari[$modul] ?? $modul }}</legend>
 
-                    @foreach ($izinler as $izin)
-                        @php
-                            $durum = $kayitliSecimler[$izin->id] ?? 'inherit';
-                            $isaretli = $eskiCheckboxlar
-                                ? in_array((string) $izin->id, $secilenIzinler, true)
-                                : ($durum === 'allow' || ($durum === 'inherit' && in_array($izin->id, $rolIzinleri)));
-                        @endphp
-                        <label class="kullanici-yetki-satiri" for="kullanici-izin-{{ $izin->id }}">
-                            <input type="checkbox" id="kullanici-izin-{{ $izin->id }}" name="user_permission_ids[]" value="{{ $izin->id }}" @checked($isaretli)>
-                            <span>{{ $izin->label ?? $izin->name }}</span>
-                        </label>
-                    @endforeach
-                </fieldset>
-            @endforeach
+                            @foreach ($izinler as $izin)
+                                @php
+                                    $durum = $kayitliSecimler[$izin->id] ?? 'inherit';
+                                    $isaretli = $eskiCheckboxlar
+                                        ? in_array((string) $izin->id, $secilenIzinler, true)
+                                        : ($durum === 'allow' || ($durum === 'inherit' && in_array($izin->id, $rolIzinleri)));
+                                @endphp
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" id="kullanici-izin-{{ $izin->id }}" name="user_permission_ids[]" value="{{ $izin->id }}" @checked($isaretli)>
+                                    <label class="form-check-label" for="kullanici-izin-{{ $izin->id }}">{{ data_get(__('panel.permissions'), $izin->name, $izin->label ?? $izin->name) }}</label>
+                                </div>
+                            @endforeach
+                        </fieldset>
+                    </div>
+                @endforeach
+            </div>
         </fieldset>
     </section>
 

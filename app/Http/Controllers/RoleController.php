@@ -67,7 +67,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roller.index')
-            ->with('success', 'Rol başarıyla oluşturuldu.');
+            ->with('success', __('panel.role-created'));
     }
 
     public function edit(Role $rol)
@@ -102,7 +102,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roller.index')
-            ->with('success', 'Rol ve yetkileri başarıyla güncellendi.');
+            ->with('success', __('panel.role-updated'));
     }
 
     public function destroy(Role $rol)
@@ -118,7 +118,7 @@ class RoleController extends Controller
 
             if ($hedefRol->users()->exists()) {
                 throw ValidationException::withMessages([
-                    'rol' => 'Bu role bağlı kullanıcılar var. Önce kullanıcıları başka bir role taşıyınız.',
+                    'rol' => __('panel.role-delete-has-users'),
                 ]);
             }
 
@@ -129,7 +129,7 @@ class RoleController extends Controller
 
         return redirect()
             ->route('roller.index')
-            ->with('success', 'Rol başarıyla silindi.');
+            ->with('success', __('panel.role-deleted'));
     }
 
     private function izinGruplari()

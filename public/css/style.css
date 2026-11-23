@@ -109,8 +109,125 @@ button:focus-visible {
     padding: 12px 32px;
 }
 
+.ust-menu .ust-kontrol {
+    flex-shrink: 0;
+    width: 117px;
+    height: 39px;
+    min-height: 39px;
+    margin: 0;
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.ust-menu .ust-kontrol:not(select) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+}
+
+.ust-kontrol-metni {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .misafir-duzeni .ust-menu {
-    justify-content: flex-start;
+    justify-content: space-between;
+}
+
+.misafir-duzeni .ust-menu > .logo {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.3;
+}
+
+.dil-formu {
+    flex-shrink: 0;
+    margin: 0;
+    margin-inline-start: auto;
+}
+
+.dil-secici {
+    position: relative;
+    color: #52677d;
+}
+
+.dil-secici select {
+    display: block;
+    width: 132px;
+    min-height: 42px;
+    appearance: none;
+    padding: 10px 34px 10px 39px;
+    border: 1px solid #d5dee8;
+    border-radius: 9px;
+    background-color: #f8fafc;
+    color: #16324f;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.dil-secici select:hover {
+    border-color: #9aafc1;
+    background-color: #edf3f7;
+}
+
+.dil-secici select:focus-visible {
+    outline: 2px solid #176b87;
+    outline-offset: 3px;
+}
+
+.dil-simgesi {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.dil-secici::after {
+    position: absolute;
+    top: 17px;
+    right: 15px;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    pointer-events: none;
+    content: '';
+}
+
+.misafir-duzeni .dil-secici {
+    color: #cfdeec;
+}
+
+.misafir-duzeni .dil-secici select {
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.misafir-duzeni .dil-secici select:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.misafir-duzeni .dil-secici select:focus-visible {
+    outline-color: #92d2e3;
+}
+
+.dil-secici option {
+    background-color: #ffffff;
+    color: #16324f;
 }
 
 .kullanici-bilgi {
@@ -537,6 +654,14 @@ tr:last-child td {
     .ust-menu {
         flex-wrap: wrap;
         gap: 8px 12px;
+    }
+
+    .misafir-duzeni .ust-menu {
+        flex-wrap: nowrap;
+    }
+
+    .misafir-duzeni .ust-menu > .logo {
+        font-size: 18px;
     }
 
     .kullanici-bilgi {

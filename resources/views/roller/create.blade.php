@@ -1,35 +1,20 @@
-{{-- Projenin ortak sayfa düzenini kullanır. --}}
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-{{-- Tarayıcı sekmesinin başlığını belirler. --}}
-@section('title', 'Yeni Rol Ekle')
+@section('title', __('panel.new-role'))
 
-{{-- Sayfanın içerik alanını başlatır. --}}
 @section('content')
 
-    <section class="baslik-alani">
-        <div>
-            <h1>Yeni Rol Ekle</h1>
-
-            <p>
-                Rol bilgilerini girin ve bu role verilecek yetkileri seçin.
-            </p>
-        </div>
+    <section class="mb-4">
+        <h1 class="h3 mb-2">{{ __('panel.new-role') }}</h1>
+        <p class="text-muted mb-0">{{ __('panel.new-role-description') }}</p>
     </section>
 
-    {{-- Yeni rol bilgilerini store metoduna gönderir. --}}
-    <form
-        action="{{ route('roller.store') }}"
-        method="POST"
-        class="form-kutusu"
-    >
-        {{-- Laravel'in form isteğini doğrulaması için CSRF token'ı ekler. --}}
+    <form action="{{ route('roller.store') }}" method="POST" class="card">
         @csrf
 
-        {{-- Ortak rol formunu ekler ve kaydetme butonunun metnini belirler. --}}
-        @include('roller._form', [
-            'butonMetni' => 'Rolü Oluştur',
-        ])
+        <div class="card-body">
+            @include('roller._form', ['butonMetni' => __('panel.create-role')])
+        </div>
     </form>
 
 @endsection

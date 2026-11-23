@@ -24,109 +24,50 @@
 
     // İzin kodlarının ilk bölümünü okunabilir modül adlarıyla eşleştirir.
     $modulAdlari = [
-        'kategori' => 'Kategoriler',
-        'urun' => 'Ürünler',
-        'siparis' => 'Siparişler',
-        'kullanici' => 'Kullanıcılar',
+        'kategori' => __('panel.categories'),
+        'urun' => __('panel.products'),
+        'siparis' => __('panel.orders'),
+        'kullanici' => __('panel.users'),
+        'tema' => __('tema.title'),
     ];
 @endphp
 
-{{-- Checkbox seçilmemiş olsa bile formun gönderildiğini belirtir. --}}
 <input type="hidden" name="izin_formu" value="1">
 
-<div class="form-grup">
-    <label for="label">Rol Adı</label>
-
-    {{-- Hata sonrasında eski girdiyi, ilk açılışta mevcut rol adını gösterir. --}}
-    <input
-        type="text"
-        id="label"
-        name="label"
-        value="{{ old('label', $formRolu?->label) }}"
-        maxlength="255"
-        required
-        autofocus
-    >
-
-    <small class="form-aciklama">
-        Örnek: Depo Sorumlusu, Admin, Satış Temsilcisi.
-    </small>
+<div class="mb-3">
+    <label for="label" class="form-label">{{ __('panel.role-name') }}</label>
+    <input type="text" id="label" name="label" class="form-control" value="{{ old('label', $formRolu?->label) }}" maxlength="255" required autofocus>
+    <div class="form-text">{{ __('panel.role-name-help') }}</div>
 </div>
 
-<div class="form-grup">
-    <label for="name">Rol Kodu</label>
-
-    {{-- Sistemde kullanılan benzersiz rol kodunu gönderir. --}}
-    <input
-        type="text"
-        id="name"
-        name="name"
-        value="{{ old('name', $formRolu?->name) }}"
-        maxlength="100"
-        required
-    >
-
-    <small class="form-aciklama">
-        Küçük İngilizce harfler, rakamlar ve aralarda tire kullanınız.
-        Örnek: depo-sorumlusu.
-    </small>
+<div class="mb-4">
+    <label for="name" class="form-label">{{ __('panel.role-code') }}</label>
+    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $formRolu?->name) }}" maxlength="100" required>
+    <div class="form-text">{{ __('panel.role-code-help') }}</div>
 </div>
 
-<div class="form-grup">
-    <h2>Rol Yetkileri</h2>
+<section>
+    <h2 class="h5 mb-2">{{ __('panel.role-permissions') }}</h2>
+    <p class="text-muted mb-3">{{ __('panel.role-permissions-help') }}</p>
 
-    <p class="form-aciklama">
-        Bu role bağlı kullanıcıların yapabileceği işlemleri seçiniz.
-        Düzenleme sırasında kaldırılan seçimler rolden çıkarılır.
-        Her işlem izni bağımsızdır; yalnızca işaretlediğiniz izinler role verilir.
-    </p>
-
-    {{-- Controller tarafından hazırlanan modül grupları üzerinde dolaşır. --}}
     @forelse ($izinGruplari as $modul => $izinler)
-        <fieldset class="form-grup">
-            <legend>
-                {{-- Tanımlanmamış yeni modüllerde modül kodunu gösterir. --}}
-                {{ $modulAdlari[$modul] ?? $modul }}
-            </legend>
+        <fieldset class="border rounded p-3 mb-3">
+            <legend class="float-none w-auto px-2 fs-6 fw-bold">{{ $modulAdlari[$modul] ?? $modul }}</legend>
 
-            {{-- Modüldeki her izni ayrı bir checkbox olarak gösterir. --}}
             @foreach ($izinler as $izin)
-                <div>
-                    <label for="izin-{{ $izin->id }}" class="izin-secimi">
-                        <input
-                            type="checkbox"
-                            id="izin-{{ $izin->id }}"
-                            name="permission_ids[]"
-                            value="{{ $izin->id }}"
-                            @checked(
-                                in_array(
-                                    (string) $izin->id,
-                                    $seciliIzinler,
-                                    true
-                                )
-                            )
-                        >
-
-                        {{-- Etiket yoksa izin kodunu gösterir. --}}
-                        <span>{{ $izin->label ?? $izin->name }}</span>
-                    </label>
+                <div class="form-check mb-2">
+                    <input type="checkbox" class="form-check-input" id="izin-{{ $izin->id }}" name="permission_ids[]" value="{{ $izin->id }}" @checked(in_array((string) $izin->id, $seciliIzinler, true))>
+                    <label class="form-check-label" for="izin-{{ $izin->id }}">{{ data_get(__('panel.permissions'), $izin->name, $izin->label ?? $izin->name) }}</label>
                 </div>
             @endforeach
+
         </fieldset>
     @empty
-        <p class="uyari uyari-hata">
-            Sistemde tanımlı izin bulunamadı.
-        </p>
+        <div class="alert alert-danger" role="alert">{{ __('panel.no-permissions') }}</div>
     @endforelse
-</div>
+</section>
 
-<div class="form-butonlari">
-    {{-- Oluşturma ve düzenleme ekranı buton metnini kendisi gönderecek. --}}
-    <button type="submit" class="buton buton-birincil">
-        {{ $butonMetni }}
-    </button>
-
-    <a href="{{ route('roller.index') }}" class="buton buton-ikincil">
-        İptal
-    </a>
+<div class="d-flex align-items-center flex-wrap gap-2 mt-4">
+    <button type="submit" class="btn btn-primary">{{ $butonMetni }}</button>
+    <a href="{{ route('roller.index') }}" class="btn btn-secondary">{{ __('panel.cancel-button') }}</a>
 </div>

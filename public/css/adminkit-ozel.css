@@ -1,0 +1,99 @@
+.tema-ust-kontrol {
+    width: 132px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    font-size: 14px;
+}
+
+.tema-kullanici-adi {
+    max-width: 180px;
+}
+
+@media (max-width: 575.98px) {
+    .tema-kullanici-adi {
+        max-width: 80px;
+    }
+}
+
+.tema-urun-gorseli {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.tema-urun-onizleme {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+}
+
+a.tema-ust-kontrol,
+button.tema-ust-kontrol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dar ekranda DataTables tablosunun ve araçlarının kartın dışına taşmasını engeller. */
+.adminkit-tablo {
+    overflow-x: auto; /* Kart daraldığında tablo ve araçlar için yatay kaydırma sağlar. */
+} /* Tablo kapsayıcısının kurallarını kapatır. */
+
+/* Mevcut sütun hizalamasını AdminKit içinde de korur. */
+.adminkit-tablo table.dataTable thead th,
+.adminkit-tablo table.dataTable tbody td {
+    text-align: left; /* Metin ve sayı hücrelerinin önceki görünümdeki gibi solda kalmasını sağlar. */
+} /* Hücre hizalama kurallarını kapatır. */
+
+/* Sayısal sütunlar dahil tablo başlıklarının aynı yönde görünmesini sağlar. */
+.adminkit-tablo table.dataTable thead th div.dt-column-header {
+    flex-direction: row; /* Başlık metnini solda, sütun kontrollerini sağda tutar. */
+    justify-content: space-between; /* Başlık ile kontrollerin arasına boşluk dağıtır. */
+} /* Başlık kapsayıcısının kurallarını kapatır. */
+
+/* DataTables'ın sayısal başlıklar için verdiği sağ hizalamayı düzeltir. */
+.adminkit-tablo table.dataTable thead th div.dt-column-header .dt-column-title {
+    text-align: left; /* ID dahil bütün sütun başlıklarını sola hizalar. */
+} /* Başlık metni kurallarını kapatır. */
+
+/* Sütun sıralama ve taşıma düğmelerinin sağda kalmasını sağlar. */
+.adminkit-tablo table.dataTable thead th div.dt-column-header .dtcc {
+    margin-left: auto; /* Kontrolleri başlık alanının sağına iter. */
+} /* Sütun kontrolü kurallarını kapatır. */
+
+
+/* Seçili satırın eski paneldeki okunabilir açık mavi görünümünü korur. */
+.adminkit-tablo table.dataTable {
+    --dt-row_background-selected: 220, 236, 247; /* DataTables satır seçim arka planını tanımlar. */
+    --dt-row-text_color-selected: 37, 48, 68; /* Seçili satırdaki yazıları koyu renkte tutar. */
+    --dt-row-link_color-selected: 52, 64, 84; /* Seçili satırdaki bağlantı rengini tanımlar. */
+    --dt_background-selected: 220, 236, 247; /* DataTables seçili arka plan değişkenini de aynı renge ayarlar. */
+    --dt_color-selected: 37, 48, 68; /* DataTables seçili metin değişkenini aynı renge ayarlar. */
+    --dt_link_color-selected: 52, 64, 84; /* DataTables seçili bağlantı değişkenini aynı renge ayarlar. */
+} /* Satır seçimi renklerini kapatır. */
+
+/* DataTables satır seçiminin işlem butonlarının beyaz yazılarını değiştirmesini engeller. */
+.adminkit-tablo table.dataTable > tbody > tr.selected a.btn {
+    color: #ffffff; /* Renkli işlem butonlarının metnini beyaz tutar. */
+} /* Seçili satırdaki buton yazısı kuralını kapatır. */
+
+/* JavaScript'in mevcut slug çiziminde kullandığı sınıfı yeni tema içinde biçimlendirir. */
+.adminkit-tablo .kod-metin {
+    display: inline-block; /* Slug etiketinin kendi kutusu içinde görünmesini sağlar. */
+    padding: 4px 7px; /* Etiket metninin çevresine boşluk ekler. */
+    border-radius: 5px; /* Etiket köşelerini yumuşatır. */
+    background-color: #eef3f7; /* Slug için açık renkli arka plan verir. */
+    color: #344054; /* Slug metninin okunabilir koyu rengini belirler. */
+    font-family: Consolas, monospace; /* Adres kodunu sabit genişlikli yazı tipiyle gösterir. */
+    font-size: 13px; /* Etiketin yazı boyutunu belirler. */
+} /* Slug etiketi kurallarını kapatır. */
+
+/* DataTables satırlarında kullanılan yardımcı açıklamaları biçimlendirir. */
+.adminkit-tablo .urun-alt-bilgi {
+    margin-top: 3px; /* Açıklama ile üstündeki kullanıcı adı arasına boşluk verir. */
+    color: #6c757d; /* Açıklamayı ana metinden daha soluk gösterir. */
+    font-size: 12px; /* Açıklamanın kullanıcı adından küçük görünmesini sağlar. */
+    line-height: 1.4; /* Açıklamanın satır yüksekliğini düzenler. */
+} /* Yardımcı açıklamanın stil kurallarını kapatır. */

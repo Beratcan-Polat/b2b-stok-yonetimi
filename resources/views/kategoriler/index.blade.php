@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Kategori Yönetimi')
+@section('title', __('panel.categories-management'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -11,32 +11,31 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div>
-            <h1>Kategori Yönetimi</h1>
-            <p>Ürünlerin bağlı olacağı kategorileri görüntüleyin ve yönetin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.categories-management') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.categories-sentence') }}</p>
         </div>
-
         @can('create', App\Models\Category::class)
-            <a href="{{ route('kategoriler.create') }}" class="buton buton-birincil">
-                Yeni Kategori Ekle
-            </a>
+            <a href="{{ route('kategoriler.create') }}" class="btn btn-primary align-self-start">{{ __('panel.category-buton') }}</a>
         @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="kategoriler-tablosu">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Kategori Adı</th>
-                    <th>Slug</th>
-                    <th>Ürün Sayısı</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="kategoriler-tablosu" class="table table-hover w-100">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ __('panel.category-name') }}</th>
+                        <th>Slug</th>
+                        <th>{{ __('panel.product-count') }}</th>
+                        <th>{{ __('panel.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -65,7 +64,7 @@
                         buttons: [
                             {
                                 extend: 'copy',
-                                text: 'Kopyala',
+                                text: {{ Js::from(__('panel.copy')) }},
                                 exportOptions: { columns: [0, 1, 2, 3]}
                             },
                             {
@@ -85,14 +84,14 @@
                             },
                             {
                                 extend: 'print',
-                                text: 'Tümünü Yazdır',
+                                text: {{ Js::from(__('panel.print-all')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3],
                                 }
                             },
                             {
                                 extend: 'selectNone',
-                                text: 'Seçimi Temizle'
+                                text: {{ Js::from(__('panel.clear-selection')) }}
                             }
                         ]
                     }
@@ -139,16 +138,9 @@
                 ],
                 order: [],
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen kategori bulunamadı.',
-                    emptyTable: 'Henüz kategori bulunmuyor.',
-                    paginate: {
-                        previous: 'Önceki',
-                        next: 'Sonraki'
-                    }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-categories')) }},
+                    emptyTable: {{ Js::from(__('panel.no-categories')) }}
                 }
             });
         });

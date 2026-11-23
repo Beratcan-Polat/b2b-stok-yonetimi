@@ -35,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('admin', fn (User $user): bool => $user->isSuperAdmin());
+        Gate::define('tema.yonet', fn (User $user): bool => $user->hasPermissionTo('tema.yonet'),);
     }
 }

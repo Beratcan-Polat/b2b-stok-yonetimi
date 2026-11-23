@@ -27,12 +27,12 @@ class OrderController extends Controller
         $veriler = $siparisler->map(function (Order $siparis): array {
             return [
                 'id' => $siparis->id,
-                'product_name' => $siparis->product?->name ?? 'Silinmiş ürün',
-                'product_sku' => $siparis->product?->sku ?? 'Ürün kaydı artık mevcut değil.',
+                'product_name' => $siparis->product?->name ?? __('panel.deleted-product'),
+                'product_sku' => $siparis->product?->sku ?? __('panel.missing-product'),
                 'customer_name' => $siparis->customer_name,
                 'quantity' => $siparis->quantity,
                 'total_price' => (float) $siparis->total_price,
-                'status' => $siparis->status,
+                'status' => $siparis->status === 'Bekliyor' ? __('panel.order-pending') : $siparis->status,
                 'created_at' => $siparis->created_at->toIso8601String(),
                 'created_at_display' => $siparis->created_at->format('d.m.Y H:i'),
             ];
@@ -71,7 +71,9 @@ class OrderController extends Controller
         Gate::authorize('create', Order::class);
 
         if ($urun->stock <= 0) {
-            return redirect()->route('urunler.index')->with('error', 'Bu ürün stokta bulunmadığı için sipariş verilemez.');
+            $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'siparisler.urun-sec';
+
+            return redirect()->route($donus)->with('error', __('panel.order-out-of-stock'));
         }
 
         return view('siparisler.create', compact('urun'));
@@ -80,7 +82,9 @@ class OrderController extends Controller
     public function store(OrderRequest $request, Product $urun)
     {
         if ($urun->stock <= 0) {
-            return redirect()->route('urunler.index')->with('error', 'Bu ürün stokta bulunmadığı için sipariş verilemez.');
+            $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'siparisler.urun-sec';
+
+            return redirect()->route($donus)->with('error', __('panel.order-out-of-stock'));
         }
 
         $veriler = $request->validated();
@@ -89,7 +93,7 @@ class OrderController extends Controller
 
         if ($adet > $urun->stock) {
             return back()->withErrors([
-                'quantity' => 'Sipariş adedi mevcut stoktan fazla olamaz.',
+                'quantity' => __('panel.order-exceeds-stock'),
             ])->withInput();
         }
 
@@ -105,6 +109,6 @@ class OrderController extends Controller
 
         $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'siparisler.urun-sec';
 
-        return redirect()->route($donus)->with('success', 'Sipariş başarıyla oluşturuldu ve ürün stoğu güncellendi.');
+        return redirect()->route($donus)->with('success', __('panel.order-created'));
     }
 }

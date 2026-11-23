@@ -70,24 +70,24 @@ class RoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Rol kodu zorunludur.',
-            'name.string' => 'Rol kodu metin olmalıdır.',
-            'name.max' => 'Rol kodu en fazla 100 karakter olabilir.',
-            'name.regex' => 'Rol kodunda küçük İngilizce harfler, rakamlar ve aralarda tire kullanınız.',
-            'name.not_in' => 'Bu rol kodu sistem tarafından ayrılmıştır.',
-            'name.unique' => 'Bu rol kodu zaten kullanılıyor.',
+            'name.required' => __('panel.validation.role.name-required'),
+            'name.string' => __('panel.validation.role.name-string'),
+            'name.max' => __('panel.validation.role.name-max'),
+            'name.regex' => __('panel.validation.role.name-regex'),
+            'name.not_in' => __('panel.validation.role.name-not_in'),
+            'name.unique' => __('panel.validation.role.name-unique'),
 
-            'label.required' => 'Rol adı zorunludur.',
-            'label.string' => 'Rol adı metin olmalıdır.',
-            'label.max' => 'Rol adı en fazla 255 karakter olabilir.',
+            'label.required' => __('panel.validation.role.label-required'),
+            'label.string' => __('panel.validation.role.label-string'),
+            'label.max' => __('panel.validation.role.label-max'),
 
-            'permission_ids.array' => 'İzinler liste olarak gönderilmelidir.',
-            'permission_ids.*.required' => 'İzin seçimi boş değer içeremez.',
-            'permission_ids.*.integer' => 'Geçerli bir izin seçiniz.',
-            'permission_ids.*.distinct' => 'Aynı izin birden fazla kez seçilemez.',
-            'permission_ids.*.exists' => 'Seçilen izin bulunamadı.',
+            'permission_ids.array' => __('panel.validation.role.permission_ids-array'),
+            'permission_ids.*.required' => __('panel.validation.role.permission_ids-item-required'),
+            'permission_ids.*.integer' => __('panel.validation.role.permission_ids-item-integer'),
+            'permission_ids.*.distinct' => __('panel.validation.role.permission_ids-item-distinct'),
+            'permission_ids.*.exists' => __('panel.validation.role.permission_ids-item-exists'),
 
-            'is_super_admin.prohibited' => 'Bu form üzerinden Süper Admin rolü oluşturulamaz.',
+            'is_super_admin.prohibited' => __('panel.validation.role.is_super_admin-prohibited'),
         ];
     }
 }

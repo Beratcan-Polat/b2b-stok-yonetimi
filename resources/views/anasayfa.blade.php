@@ -1,100 +1,114 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Ana Sayfa')
+@section('title', __('panel.home'))
 
 @section('content')
-
-    <section class="baslik-alani">
-        <div>
-            <h1>Yönetim Paneli</h1>
-            <p>
-                Hoş geldiniz {{ auth()->user()->name }}. Yetkiniz dahilindeki işlemleri bu panel üzerinden yönetebilirsiniz.
-            </p>
-        </div>
+    <section class="mb-4">
+        <h1 class="h3 mb-2">{{ __('panel.panel') }}</h1>
+        <p class="text-muted mb-0">
+            {{ __('panel.welcome') }} {{ auth()->user()->name }}. {{ __('panel.admin_sentence') }}
+        </p>
     </section>
 
-    <section class="kart-grid">
-
+    <div class="row g-4">
         @canany(['viewAny', 'create'], App\Models\Category::class)
-            <article class="kart">
-                <div class="kart-ikon">K</div>
-
-                <h2>Kategori Yönetimi</h2>
-
-                <p>
-                    Ürünlerin bağlı olacağı kategorileri ekleyin, düzenleyin ve yönetin.
-                </p>
-
-                <a href="{{ auth()->user()->can('viewAny', App\Models\Category::class) ? route('kategoriler.index') : route('kategoriler.create') }}" class="buton buton-birincil">
-                    {{ auth()->user()->can('viewAny', App\Models\Category::class) ? 'Kategorileri Yönet' : 'Kategori Ekle' }}
-                </a>
-            </article>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                            <i data-feather="folder" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="h4 mb-2">{{ __('panel.categories-management') }}</h2>
+                        <p class="text-muted mb-4">{{ __('panel.categories-sentence') }}</p>
+                        <a href="{{ auth()->user()->can('viewAny', App\Models\Category::class) ? route('kategoriler.index') : route('kategoriler.create') }}" class="btn btn-primary mt-auto align-self-start">
+                            {{ auth()->user()->can('viewAny', App\Models\Category::class) ? __('panel.manage-categories') : __('panel.add-category') }}
+                        </a>
+                    </div>
+                </article>
+            </div>
         @endcanany
 
-        @canany(['viewAny', 'create'], App\Models\Product::class)
-            <article class="kart">
-                <div class="kart-ikon">Ü</div>
-
-                <h2>Ürün Yönetimi</h2>
-
-                <p>
-                    Ürün bilgilerini, fiyatlarını, stoklarını ve görsellerini yönetin.
-                </p>
-
-                <a href="{{ auth()->user()->can('viewAny', App\Models\Product::class) ? route('urunler.index') : route('urunler.create') }}" class="buton buton-birincil">
-                    {{ auth()->user()->can('viewAny', App\Models\Product::class) ? 'Ürünleri Yönet' : 'Ürün Ekle' }}
-                </a>
-            </article>
+        @canany(['viewAny', 'create', 'viewTrashed'], App\Models\Product::class)
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                            <i data-feather="package" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="h4 mb-2">{{ __('panel.products-management') }}</h2>
+                        <p class="text-muted mb-4">{{ __('panel.products-sentence') }}</p>
+                        <a href="{{ auth()->user()->can('viewAny', App\Models\Product::class) ? route('urunler.index') : (auth()->user()->can('create', App\Models\Product::class) ? route('urunler.create') : route('urunler.silinenler')) }}" class="btn btn-primary mt-auto align-self-start">
+                            {{ auth()->user()->can('viewAny', App\Models\Product::class) ? __('panel.manage-products') : (auth()->user()->can('create', App\Models\Product::class) ? __('panel.add-product') : __('panel.deleted-products')) }}
+                        </a>
+                    </div>
+                </article>
+            </div>
         @endcanany
 
         @canany(['viewAny', 'create'], App\Models\Order::class)
-            <article class="kart">
-                <div class="kart-ikon">S</div>
-
-                <h2>Sipariş Yönetimi</h2>
-
-                <p>
-                    Müşteri siparişlerini oluşturun ve ürün stoklarını takip edin.
-                </p>
-
-                <a href="{{ auth()->user()->can('viewAny', App\Models\Order::class) ? route('siparisler.index') : route('siparisler.urun-sec') }}" class="buton buton-birincil">
-                    {{ auth()->user()->can('viewAny', App\Models\Order::class) ? 'Siparişleri Görüntüle' : 'Sipariş Oluştur' }}
-                </a>
-            </article>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                            <i data-feather="shopping-cart" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="h4 mb-2">{{ __('panel.orders-management') }}</h2>
+                        <p class="text-muted mb-4">{{ __('panel.orders-sentence') }}</p>
+                        <a href="{{ auth()->user()->can('viewAny', App\Models\Order::class) ? route('siparisler.index') : route('siparisler.urun-sec') }}" class="btn btn-primary mt-auto align-self-start">
+                            {{ auth()->user()->can('viewAny', App\Models\Order::class) ? __('panel.view-orders') : __('panel.create-order') }}
+                        </a>
+                    </div>
+                </article>
+            </div>
         @endcanany
 
         @canany(['viewAny', 'create'], App\Models\User::class)
-            <article class="kart">
-                <div class="kart-ikon">P</div>
-
-                <h2>Kullanıcı Yönetimi</h2>
-
-                <p>
-                    Panel kullanıcılarını ekleyin ve rollerini belirleyin.
-                </p>
-
-                <a href="{{ auth()->user()->can('viewAny', App\Models\User::class) ? route('kullanicilar.index') : route('kullanicilar.create') }}" class="buton buton-birincil">
-                    {{ auth()->user()->can('viewAny', App\Models\User::class) ? 'Kullanıcıları Yönet' : 'Kullanıcı Ekle' }}
-                </a>
-            </article>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                            <i data-feather="users" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="h4 mb-2">{{ __('panel.users-management') }}</h2>
+                        <p class="text-muted mb-4">{{ __('panel.users-sentence') }}</p>
+                        <a href="{{ auth()->user()->can('viewAny', App\Models\User::class) ? route('kullanicilar.index') : route('kullanicilar.create') }}" class="btn btn-primary mt-auto align-self-start">
+                            {{ auth()->user()->can('viewAny', App\Models\User::class) ? __('panel.manage-users') : __('panel.add-user') }}
+                        </a>
+                    </div>
+                </article>
+            </div>
         @endcanany
 
         @can('viewAny', App\Models\Role::class)
-            <article class="kart">
-                <div class="kart-ikon">R</div>
-
-                <h2>Roller ve Yetkiler</h2>
-
-                <p>
-                    Yeni roller oluşturun ve kullanıcıların erişebileceği işlemleri belirleyin.
-                </p>
-
-                <a href="{{ route('roller.index') }}" class="buton buton-birincil">
-                    Rolleri Yönet
-                </a>
-            </article>
+            <div class="col-12 col-md-6 col-xl-4">
+                <article class="card h-100 mb-0">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                            <i data-feather="shield" aria-hidden="true"></i>
+                        </div>
+                        <h2 class="h4 mb-2">{{ __('panel.roles-management') }}</h2>
+                        <p class="text-muted mb-4">{{ __('panel.roles-sentence') }}</p>
+                        <a href="{{ route('roller.index') }}" class="btn btn-primary mt-auto align-self-start">
+                            {{ __('panel.manage-roles') }}
+                        </a>
+                    </div>
+                </article>
+            </div>
         @endcan
 
-    </section>
-
+        <div class="col-12 col-md-6 col-xl-4">
+            <article class="card h-100 mb-0">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-light text-primary rounded p-3 mb-3 align-self-start">
+                        <i data-feather="user" aria-hidden="true"></i>
+                    </div>
+                    <h2 class="h4 mb-2">{{ __('panel.profile') }}</h2>
+                    <p class="text-muted mb-4">{{ __('panel.profile-description') }}</p>
+                    <a href="{{ route('profil.goster') }}" class="btn btn-primary mt-auto align-self-start">
+                        {{ __('panel.profile') }}
+                    </a>
+                </div>
+            </article>
+        </div>
+    </div>
 @endsection

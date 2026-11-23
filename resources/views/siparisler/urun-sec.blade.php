@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Sipariş İçin Ürün Seç')
+@section('title', __('panel.select-order-product'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -9,25 +9,30 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
-            <h1>Sipariş İçin Ürün Seç</h1>
-            <p>Sipariş oluşturmak istediğiniz stoktaki ürünü seçin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.select-order-product') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.select-order-product-description') }}</p>
         </div>
+        @can('viewAny', App\Models\Order::class)
+            <a href="{{ route('siparisler.index') }}" class="btn btn-secondary">{{ __('panel.orders') }}</a>
+        @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="siparis-urun-sec-tablosu">
-            <thead>
-                <tr>
-                    <th>Ürün</th>
-                    <th>SKU</th>
-                    <th>Stok</th>
-                    <th>İşlem</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="siparis-urun-sec-tablosu" class="table table-striped align-middle w-100">
+                <thead>
+                    <tr>
+                        <th>{{ __('panel.product') }}</th>
+                        <th>SKU</th>
+                        <th>{{ __('panel.stock') }}</th>
+                        <th>{{ __('panel.action') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -51,13 +56,9 @@
                 ],
                 order: [],
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen ürün bulunamadı.',
-                    emptyTable: 'Sipariş verilebilecek ürün bulunmuyor.',
-                    paginate: { previous: 'Önceki', next: 'Sonraki' }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-products')) }},
+                    emptyTable: {{ Js::from(__('panel.no-orderable-products')) }}
                 }
             });
         });

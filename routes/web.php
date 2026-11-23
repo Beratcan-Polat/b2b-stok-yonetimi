@@ -8,14 +8,64 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\CartController;
 
-Route::middleware('guest')->group(function () {
+Route::post('/dil', function (Request $request) {
+    $validated = $request->validate([
+        'locale' => ['required', 'in:tr,en'],
+    ]);
+
+    $request->session()->put('locale', $validated['locale']);
+
+    return back();
+})->name('dil.degistir');
+
+Route::get('/', [CatalogController::class, 'index'])->name('katalog.index');
+Route::get('/urun-gorseli/{urun}', [CatalogController::class, 'gorsel'])->name('katalog.gorsel');
+
+Route::get('/sepet', [CartController::class, 'index'])
+    ->name('sepet.index')
+    ->block(10, 10);
+
+Route::post('/sepet/urunler/{urun}', [CartController::class, 'store'])
+    ->whereNumber('urun')
+    ->name('sepet.store')
+    ->block(10, 10);
+
+Route::patch('/sepet/urunler/{urun}', [CartController::class, 'update'])
+    ->whereNumber('urun')
+    ->name('sepet.update')
+    ->block(10, 10);
+
+Route::delete('/sepet/urunler/{urun}', [CartController::class, 'destroy'])
+    ->whereNumber('urun')
+    ->name('sepet.destroy')
+    ->block(10, 10);
+
+Route::delete('/sepet', [CartController::class, 'clear'])
+    ->name('sepet.clear')
+    ->block(10, 10);
+
+
+Route::get('/sepet/hesap', [CartController::class, 'account'])
+    ->middleware('auth')
+    ->name('sepet.account');
+
+Route::post('/sepet/aktar', [CartController::class, 'merge'])
+    ->middleware('auth')
+    ->name('sepet.merge')
+    ->block(10, 10);
+
+Route::prefix('panel')->middleware('guest')->group(function () {
     Route::get('/giris', [AuthController::class, 'girisFormu'])->name('giris');
-    Route::post('/giris', [AuthController::class, 'giris'])->name('giris.gonder');
+    Route::post('/giris', [AuthController::class, 'giris'])->name('giris.gonder')->block(10,10);
 });
 
-Route::middleware('auth')->group(function () {
+Route::prefix('panel')->middleware('auth')->group(function () {
 
     Route::post('/cikis', [AuthController::class, 'cikis'])->name('cikis');
 
@@ -80,4 +130,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/urunler/{urun}/siparis', [OrderController::class, 'store'])
         ->name('siparisler.store');
+
+    Route::get('/tema-ayarlari', [ThemeCOntroller::class, 'edit'])->name('tema.edit');
+
+    Route::put('/tema-ayarlari', [ThemeController::class, 'update'])->name('tema.update');
 });
+

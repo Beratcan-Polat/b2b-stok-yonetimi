@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Ürün Yönetimi')
+@section('title', __('panel.products-management'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -11,57 +11,61 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
-            <h1>Ürün Yönetimi</h1>
-            <p>Ürün bilgilerini, görsellerini, fiyatlarını ve stoklarını yönetin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.products-management') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.products-description') }}</p>
         </div>
 
-        <div class="baslik-butonlari">
+        <div class="d-flex align-items-center flex-wrap gap-2">
             @can('viewTrashed', App\Models\Product::class)
-                <a href="{{ route('urunler.silinenler') }}" class="buton buton-ikincil">Silinen Ürünler</a>
+                <a href="{{ route('urunler.silinenler') }}" class="btn btn-secondary">{{ __('panel.deleted-products') }}</a>
             @endcan
 
             @can('create', App\Models\Product::class)
-                <a href="{{ route('urunler.create') }}" class="buton buton-birincil">Yeni Ürün Ekle</a>
+                <a href="{{ route('urunler.create') }}" class="btn btn-primary">{{ __('panel.new-product') }}</a>
             @endcan
         </div>
     </section>
 
-    <div class="filtre-formu">
-        <div class="filtre-alanlari">
-            <div class="form-grup filtre-grup">
-                <label for="category_id">Kategori</label>
-                <select id="category_id" name="category_id">
-                    <option value="">Tüm kategoriler</option>
-                    @foreach ($kategoriler as $kategori)
-                        <option value="{{ $kategori->id }}" @selected(request('category_id') == $kategori->id)>
-                            {{ $kategori->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row align-items-end g-3">
+                <div class="col-12 col-md-6 col-xl-4">
+                    <label for="category_id" class="form-label">{{ __('panel.category') }}</label>
+                    <select id="category_id" name="category_id" class="form-select">
+                        <option value="">{{ __('panel.all-categories') }}</option>
+                        @foreach ($kategoriler as $kategori)
+                            <option value="{{ $kategori->id }}" @selected(request('category_id') == $kategori->id)>
+                                {{ $kategori->localizedName() }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div class="filtre-butonlari">
-                <button type="button" id="urun-filtre-temizle" class="buton buton-ikincil">Temizle</button>
+                <div class="col-12 col-md-auto">
+                    <button type="button" id="urun-filtre-temizle" class="btn btn-secondary">{{ __('panel.clear') }}</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="tablo-kapsayici">
-        <table id="urunler-tablosu">
-            <thead>
-                <tr>
-                    <th>Görsel</th>
-                    <th>Ürün</th>
-                    <th>Kategori</th>
-                    <th>Fiyat</th>
-                    <th>Stok</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="urunler-tablosu" class="table table-striped align-middle w-100">
+                <thead>
+                    <tr>
+                        <th>{{ __('panel.image') }}</th>
+                        <th>{{ __('panel.product') }}</th>
+                        <th>{{ __('panel.category') }}</th>
+                        <th>{{ __('panel.price') }}</th>
+                        <th>{{ __('panel.stock') }}</th>
+                        <th>{{ __('panel.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -80,7 +84,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const guvenliMetin = DataTable.render.text().display;
             const kategoriAlani = document.getElementById('category_id');
-            const paraBirimi = new Intl.NumberFormat('tr-TR', {
+            const paraBirimi = new Intl.NumberFormat({{ Js::from(app()->getLocale()) }}, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
@@ -90,7 +94,7 @@
                     top1Start: {
                         buttons: [{
                                 extend: 'copy',
-                                text: 'Kopyala',
+                                text: {{ Js::from(__('panel.copy')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4]
                                 }
@@ -118,14 +122,14 @@
                             },
                             {
                                 extend: 'print',
-                                text: 'Tümünü Yazdır',
+                                text: {{ Js::from(__('panel.print-all')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4]
                                 }
                             },
                             {
                                 extend: 'selectNone',
-                                text: 'Seçimi Temizle'
+                                text: {{ Js::from(__('panel.clear-selection')) }}
                             }
                         ]
                     }
@@ -158,7 +162,7 @@
                             }
 
                             return '<strong>' + guvenliMetin(veri) + '</strong>' +
-                                '<div class="urun-alt-bilgi">SKU: ' + guvenliMetin(satir.sku) +
+                                '<div class="text-muted small mt-1">SKU: ' + guvenliMetin(satir.sku) +
                                 '</div>';
                         }
                     },
@@ -169,6 +173,7 @@
                     },
                     {
                         data: 'price',
+                        className: 'text-nowrap',
                         render: function(veri, tur) {
                             return tur === 'display' ? paraBirimi.format(veri) + ' ₺' : veri;
                         }
@@ -181,8 +186,8 @@
                             }
 
                             return veri > 0 ?
-                                '<span class="stok-etiketi stok-var">' + veri + ' adet</span>' :
-                                '<span class="stok-etiketi stok-yok">Stokta Yok</span>';
+                                '<span class="badge bg-success">' + veri + ' ' + {{ Js::from(__('panel.units')) }} + '</span>' :
+                                '<span class="badge bg-danger">' + {{ Js::from(__('panel.out-of-stock')) }} + '</span>';
                         }
                     },
                     {
@@ -205,16 +210,9 @@
                     }
                 },
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen ürün bulunamadı.',
-                    emptyTable: 'Henüz ürün bulunmuyor.',
-                    paginate: {
-                        previous: 'Önceki',
-                        next: 'Sonraki'
-                    }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-products')) }},
+                    emptyTable: {{ Js::from(__('panel.no-products')) }}
                 }
             });
 

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Siparişler')
+@section('title', __('panel.orders'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -11,28 +11,33 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
-            <h1>Siparişler</h1>
-            <p>Oluşturulan siparişleri ve toplam tutarlarını görüntüleyin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.orders') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.orders-description') }}</p>
         </div>
+        @can('create', App\Models\Order::class)
+            <a href="{{ route('siparisler.urun-sec') }}" class="btn btn-primary">{{ __('panel.create-order') }}</a>
+        @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="siparisler-tablosu">
-            <thead>
-                <tr>
-                    <th>Sipariş No</th>
-                    <th>Ürün</th>
-                    <th>Müşteri</th>
-                    <th>Adet</th>
-                    <th>Toplam Tutar</th>
-                    <th>Durum</th>
-                    <th>Tarih</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="siparisler-tablosu" class="table table-striped align-middle w-100">
+                <thead>
+                    <tr>
+                        <th>{{ __('panel.order-number') }}</th>
+                        <th>{{ __('panel.product') }}</th>
+                        <th>{{ __('panel.customer') }}</th>
+                        <th>{{ __('panel.quantity') }}</th>
+                        <th>{{ __('panel.total-amount') }}</th>
+                        <th>{{ __('panel.status') }}</th>
+                        <th>{{ __('panel.date') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -50,7 +55,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const guvenliMetin = DataTable.render.text().display;
-            const paraBirimi = new Intl.NumberFormat('tr-TR', {
+            const paraBirimi = new Intl.NumberFormat({{ Js::from(app()->getLocale()) }}, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
@@ -60,7 +65,7 @@
                     top1Start: {
                         buttons: [{
                                 extend: 'copy',
-                                text: 'Kopyala',
+                                text: {{ Js::from(__('panel.copy')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6]
                                 }
@@ -88,14 +93,14 @@
                             },
                             {
                                 extend: 'print',
-                                text: 'Tümünü Yazdır',
+                                text: {{ Js::from(__('panel.print-all')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6]
                                 }
                             },
                             {
                                 extend: 'selectNone',
-                                text: 'Seçimi Temizle'
+                                text: {{ Js::from(__('panel.clear-selection')) }}
                             }
                         ]
                     }
@@ -129,7 +134,7 @@
                             }
 
                             return '<strong>' + guvenliMetin(veri) + '</strong>' +
-                                '<div class="urun-alt-bilgi">' + guvenliMetin(satir.product_sku) +
+                                '<div class="text-muted small mt-1">' + guvenliMetin(satir.product_sku) +
                                 '</div>';
                         }
                     },
@@ -142,7 +147,7 @@
                     },
                     {
                         data: 'total_price',
-                        className: 'tutar',
+                        className: 'text-nowrap',
                         render: function(veri, tur) {
                             return tur === 'display' ? paraBirimi.format(veri) + ' ₺' : veri;
                         }
@@ -151,13 +156,14 @@
                         data: 'status',
                         render: function(veri, tur) {
                             return tur === 'display' ?
-                                '<span class="durum-etiketi durum-bekliyor">' + guvenliMetin(veri) +
+                                '<span class="badge bg-warning text-dark">' + guvenliMetin(veri) +
                                 '</span>' :
                                 veri;
                         }
                     },
                     {
                         data: 'created_at',
+                        className: 'text-nowrap',
                         render: function(veri, tur, satir) {
                             return tur === 'display' || tur === 'filter' ? satir
                                 .created_at_display : veri;
@@ -166,16 +172,9 @@
                 ],
                 order: [],
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen sipariş bulunamadı.',
-                    emptyTable: 'Henüz sipariş oluşturulmadı.',
-                    paginate: {
-                        previous: 'Önceki',
-                        next: 'Sonraki'
-                    }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-orders')) }},
+                    emptyTable: {{ Js::from(__('panel.no-orders')) }}
                 }
             });
         });

@@ -1,0 +1,113 @@
+.katalog-sepet-araclar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.katalog .katalog-sepet-dugmesi,
+.magaza .katalog-sepet-dugmesi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 46px;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.katalog-sepet-dugmesi svg {
+    flex-shrink: 0;
+}
+
+.katalog .katalog-sepet-dugmesi--baglanti,
+.magaza .katalog-sepet-dugmesi--baglanti {
+    color: var(--katalog-vurgu, var(--magaza-mavi, #255bc8));
+    background: transparent;
+    border-color: var(--katalog-cizgi, var(--magaza-cizgi, #e3e8ef));
+    white-space: nowrap;
+}
+
+.katalog .katalog-sepet-dugmesi--baglanti:hover,
+.magaza .katalog-sepet-dugmesi--baglanti:hover {
+    border-color: currentColor;
+    background: var(--katalog-yuzey, #f0f4fc);
+}
+
+.katalog-sepete-ekle {
+    margin: 0 20px 20px;
+}
+
+.katalog .katalog-sepet-dugmesi--ekle,
+.magaza .katalog-sepet-dugmesi--ekle {
+    width: 100%;
+    color: #fff;
+    background: var(--katalog-vurgu, var(--magaza-mavi, #255bc8));
+}
+
+.katalog .katalog-sepet-dugmesi--ekle:hover:not(:disabled),
+.magaza .katalog-sepet-dugmesi--ekle:hover:not(:disabled) {
+    filter: brightness(.92);
+}
+
+.katalog-tema-iki .katalog-sepet-dugmesi--ekle {
+    color: var(--katalog-zemin);
+}
+
+.katalog .katalog-sepet-dugmesi:disabled,
+.magaza .katalog-sepet-dugmesi:disabled {
+    color: var(--katalog-soluk, var(--magaza-soluk, #657086));
+    background: var(--katalog-yuzey, #edf0f5);
+    border-color: var(--katalog-cizgi, var(--magaza-cizgi, #e3e8ef));
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+@media (min-width: 800px) {
+    .magaza .magaza-ust-menu {
+        grid-template-columns: 250px minmax(0, 1fr) auto;
+    }
+}
+
+@media (max-width: 599.98px) {
+    .katalog .katalog-ust-menu {
+        flex-wrap: wrap;
+        padding-block: 16px;
+    }
+
+    .katalog-sepet-araclar {
+        gap: 8px;
+    }
+
+    .katalog .katalog-sepet-araclar {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .magaza .magaza-ust-menu {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .magaza .katalog-sepet-araclar {
+        grid-row: 3;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .katalog .katalog-sepet-dugmesi,
+    .magaza .katalog-sepet-dugmesi {
+        min-height: 44px;
+        font-size: 13px;
+        padding-inline: 14px;
+    }
+}

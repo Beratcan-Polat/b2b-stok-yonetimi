@@ -24,12 +24,12 @@ class OrderRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'customer_name.required' => 'Müşteri adı zorunludur.',
-            'customer_name.string' => 'Müşteri adı metin olmalıdır.',
-            'customer_name.max' => 'Müşteri adı en fazla 255 karakter olabilir.',
-            'quantity.required' => 'Sipariş adedi zorunludur.',
-            'quantity.integer' => 'Sipariş adedi tam sayı olmalıdır.',
-            'quantity.min' => 'Sipariş adedi en az 1 olmalıdır.',
+            'customer_name.required' => __('panel.validation.order.customer_name-required'),
+            'customer_name.string' => __('panel.validation.order.customer_name-string'),
+            'customer_name.max' => __('panel.validation.order.customer_name-max'),
+            'quantity.required' => __('panel.validation.order.quantity-required'),
+            'quantity.integer' => __('panel.validation.order.quantity-integer'),
+            'quantity.min' => __('panel.validation.order.quantity-min'),
         ];
     }
 }

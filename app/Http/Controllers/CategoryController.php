@@ -27,7 +27,7 @@ class CategoryController extends Controller
         $veriler = $kategoriler->map(function (Category $kategori): array {
             return [
                 'id' => $kategori->id,
-                'name' => $kategori->name,
+                'name' => $kategori->localizedName(),
                 'slug' => $kategori->slug,
                 'products_count' => $kategori->products_count,
                 'actions' => view('kategoriler._actions', [
@@ -55,18 +55,19 @@ class CategoryController extends Controller
 
         if (Category::where('slug', $slug)->exists()) {
             return back()->withErrors([
-                'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.',
+                'name' => __('panel.category-slug-used'),
             ])->withInput();
         }
 
         Category::create([
             'name' => $veriler['name'],
+            'name_en' => $veriler['name_en'] ?? null,
             'slug' => $slug,
         ]);
 
         $donus = Gate::allows('viewAny', Category::class) ? 'kategoriler.index' : 'anasayfa';
 
-        return redirect()->route($donus)->with('success', 'Kategori başarıyla eklendi.');
+        return redirect()->route($donus)->with('success', __('panel.category-created'));
     }
 
     public function edit(Category $kategori)
@@ -88,16 +89,19 @@ class CategoryController extends Controller
 
         if ($slugKullaniliyor) {
             return back()->withErrors([
-                'name' => 'Bu kategori adına ait adres bilgisi daha önce kullanılmış.',
+                'name' => __('panel.category-slug-used'),
             ])->withInput();
         }
 
         $kategori->update([
             'name' => $veriler['name'],
+            'name_en' => array_key_exists('name_en', $veriler) ? $veriler['name_en'] : $kategori->name_en,
             'slug' => $slug,
         ]);
 
-        return redirect()->route('kategoriler.index')->with('success', 'Kategori başarıyla güncellendi.');
+        $donus = Gate::allows('viewAny', Category::class) ? 'kategoriler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', __('panel.category-updated'));
     }
 
     public function destroy(Category $kategori)
@@ -106,6 +110,8 @@ class CategoryController extends Controller
 
         $kategori->delete();
 
-        return redirect()->route('kategoriler.index')->with('success', 'Kategori ve bağlı ürünler başarıyla silindi.');
+        $donus = Gate::allows('viewAny', Category::class) ? 'kategoriler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', __('panel.category-deleted'));
     }
 }

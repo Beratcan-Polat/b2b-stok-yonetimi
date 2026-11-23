@@ -27,6 +27,7 @@ class RolePermissionSeeder extends Seeder
             'kullanici.ekle' => 'Kullanıcı ekleme',
             'kullanici.duzenle' => 'Kullanıcı düzenleme',
             'kullanici.sil' => 'Kullanıcı silme',
+            'tema.yonet' => 'Tema ayarlarını yönetme',
         ];
 
         foreach ($izinler as $ad => $etiket) {

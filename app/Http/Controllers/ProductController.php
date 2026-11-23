@@ -32,7 +32,7 @@ class ProductController extends Controller
                 'image' => view('urunler._image', ['urun' => $urun])->render(),
                 'name' => $urun->name,
                 'sku' => $urun->sku,
-                'category_name' => $urun->category?->name ?? 'Silinmiş kategori',
+                'category_name' => $urun->category?->localizedName() ?? __('panel.deleted-category'),
                 'price' => (float) $urun->price,
                 'stock' => $urun->stock,
                 'actions' => view('urunler._actions', ['urun' => $urun])->render(),
@@ -72,7 +72,7 @@ class ProductController extends Controller
 
         $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'anasayfa';
 
-        return redirect()->route($donus)->with('success', 'Ürün başarıyla eklendi.');
+        return redirect()->route($donus)->with('success', __('panel.product_created'));
     }
 
     public function edit(Product $urun)
@@ -107,7 +107,9 @@ class ProductController extends Controller
             'image_path' => $gorselYolu,
         ]);
 
-        return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla güncellendi.');
+        $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', __('panel.product-updated'));
     }
 
     public function destroy(Product $urun)
@@ -116,7 +118,9 @@ class ProductController extends Controller
 
         $urun->delete();
 
-        return redirect()->route('urunler.index')->with('success', 'Ürün başarıyla silindi.');
+        $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'anasayfa';
+
+        return redirect()->route($donus)->with('success', __('panel.product-deleted'));
     }
 
     public function silinenler(): View
@@ -137,7 +141,7 @@ class ProductController extends Controller
                 'image' => view('urunler._image', ['urun' => $urun])->render(),
                 'name' => $urun->name,
                 'sku' => $urun->sku,
-                'category_name' => $urun->category?->name ?? 'Silinmiş kategori',
+                'category_name' => $urun->category?->localizedName() ?? __('panel.deleted-category'),
                 'stock' => $urun->stock,
                 'deleted_at' => $urun->deleted_at->toIso8601String(),
                 'deleted_at_display' => $urun->deleted_at->format('d.m.Y H:i'),
@@ -156,6 +160,12 @@ class ProductController extends Controller
 
         $urun->restore();
 
-        return redirect()->route('urunler.silinenler')->with('success', 'Ürün başarıyla geri yüklendi.');
+        $donus = Gate::allows('viewAny', Product::class) ? 'urunler.index' : 'anasayfa';
+
+        if (Gate::allows('viewTrashed', Product::class)) {
+            $donus = 'urunler.silinenler';
+        }
+
+        return redirect()->route($donus)->with('success', __('panel.product-restored'));
     }
 }

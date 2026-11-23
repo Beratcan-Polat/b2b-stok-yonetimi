@@ -1,0 +1,82 @@
+# Ilk kurulum: docker compose run --rm --build app composer install --no-interaction
+# Bos veritabani: docker compose run --rm app php artisan migrate --seed --no-interaction
+# Yerel gelistirme: docker compose up -d
+# On yuz derlemesi: docker compose run --rm node sh -c "npm ci --ignore-scripts && npm run build"
+name: b2b-stok
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:${DOCKER_APP_PORT:-8000}:8000"
+    environment:
+      DB_CONNECTION: mysql
+      DB_URL: ""
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DOCKER_DB_DATABASE:-b2b_stok_gelistirme}
+      DB_USERNAME: b2b
+      DB_PASSWORD: ${DOCKER_DB_PASSWORD:?DOCKER_DB_PASSWORD degerini .env dosyasina ekleyin}
+      CACHE_STORE: redis
+      REDIS_CLIENT: predis
+      REDIS_URL: ""
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+    volumes:
+      - .:/var/www/html
+      - vendor-data:/var/www/html/vendor
+      - ./storage/app/public:/var/www/html/public/storage:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    init: true
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "127.0.0.1:${DOCKER_MYSQL_PORT:-3307}:3306"
+    environment:
+      MYSQL_DATABASE: ${DOCKER_DB_DATABASE:-b2b_stok_gelistirme}
+      MYSQL_USER: b2b
+      MYSQL_PASSWORD: ${DOCKER_DB_PASSWORD:?DOCKER_DB_PASSWORD degerini .env dosyasina ekleyin}
+      MYSQL_ROOT_PASSWORD: ${DOCKER_MYSQL_ROOT_PASSWORD:?DOCKER_MYSQL_ROOT_PASSWORD degerini .env dosyasina ekleyin}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql --host=127.0.0.1 --user=$$MYSQL_USER --database=$$MYSQL_DATABASE --execute='SELECT 1' >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:${DOCKER_REDIS_PORT:-6380}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  node:
+    image: node:22-bookworm-slim
+    profiles: ["tools"]
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - node-modules:/var/www/html/node_modules
+    command: ["npm", "run", "build"]
+
+volumes:
+  vendor-data:
+  mysql-data:
+  redis-data:
+  node-modules:

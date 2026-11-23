@@ -1,41 +1,14 @@
-{{-- Projenin ortak sayfa düzenini kullanır. --}}
-@extends('layouts.app')
-
-{{-- Tarayıcı sekmesinin başlığını belirler. --}}
-@section('title', 'Rolü Düzenle')
-
-{{-- Sayfanın içerik alanını başlatır. --}}
+@extends('layouts.adminkit')
+@section('title', __('panel.edit-role'))
 @section('content')
-
-    <section class="baslik-alani">
-        <div>
-            <h1>Rolü Düzenle</h1>
-
-            {{-- Düzenlenen rolün adını gösterir. --}}
-            <p>
-                {{ $rol->label }} rolünün bilgilerini ve yetkilerini güncelleyin.
-                Yetki değişiklikleri bu role bağlı bütün kullanıcıları etkiler.
-            </p>
-        </div>
+    <section class="mb-4">
+        <h1 class="h3 mb-2">{{ __('panel.edit-role') }}</h1>
+        <p class="text-muted mb-0">{{ __('panel.edit-role-description', ['role' => $rol->label]) }}</p>
     </section>
-
-    {{-- Rol bilgilerini update metoduna gönderir. --}}
-    <form
-        action="{{ route('roller.update', $rol) }}"
-        method="POST"
-        class="form-kutusu"
-    >
-        {{-- İsteğin CSRF token'ını ekler. --}}
-        @csrf
-
-        {{-- HTML formunun POST isteğini Laravel'de PUT olarak işler. --}}
+    <form action="{{ route('roller.update', $rol) }}" method="POST" class="card">
         @method('PUT')
-
-        {{-- Mevcut rolü ortak forma açıkça gönderir. --}}
-        @include('roller._form', [
-            'rol' => $rol,
-            'butonMetni' => 'Değişiklikleri Kaydet',
-        ])
+        <div class="card-body">
+            @include('roller._form', ['rol' => $rol, 'butonMetni' => __('panel.save-changes')])
+        </div>
     </form>
-
 @endsection

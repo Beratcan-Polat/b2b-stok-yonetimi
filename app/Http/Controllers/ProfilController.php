@@ -23,6 +23,6 @@ class ProfilController extends Controller
         ]);
 
         return redirect()->route('profil.goster')
-            ->with('success', 'Şifre başarıyla güncellendi.');
+            ->with('success', __('panel.password-updated'));
     }
 }

@@ -18,7 +18,7 @@ class ImpersonateController extends Controller
         Auth::login($kullanici);
 
         return redirect()->route('anasayfa')
-            ->with('success', $kullanici->name.' hesabına geçildi.');
+            ->with('success', __('panel.switched-account', ['name' => $kullanici->name]));
     }
 
     public function geriDon(Request $request): RedirectResponse
@@ -33,6 +33,6 @@ class ImpersonateController extends Controller
         Auth::login($superAdmin);
 
         return redirect()->route('anasayfa')
-            ->with('success', 'Süper admin hesabına geri dönüldü.');
+            ->with('success', __('panel.returned-to-admin'));
     }
 }

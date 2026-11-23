@@ -1,25 +1,22 @@
-<div class="islem-alani">
+<div class="d-flex align-items-center flex-wrap gap-2">
     @can('update', $rol)
-        <a href="{{ route('roller.edit', $rol) }}" class="buton buton-ikincil buton-kucuk">
-            Düzenle
-        </a>
+        <a href="{{ route('roller.edit', $rol) }}"
+            class="btn btn-secondary btn-sm">{{ __('panel.edit-role') }}</a>
     @endcan
 
     @can('delete', $rol)
         @if ($rol->users_count > 0)
-            <span class="urun-alt-bilgi">Kullanıcı atanmış; silinemez</span>
+            <span class="small text-muted">{{ __('panel.role-has-users') }}</span>
         @else
-            <form action="{{ route('roller.destroy', $rol) }}" method="POST" class="satir-ici-form"
-                onsubmit="return confirm('Bu rolü silmek istediğinize emin misiniz?')">
+            <form action="{{ route('roller.destroy', $rol) }}" method="POST" class="m-0" data-confirm="{{ __('panel.confirm-delete-role') }}" onsubmit="return confirm(this.dataset.confirm)">
                 @csrf
                 @method('DELETE')
-
-                <button type="submit" class="buton buton-tehlike buton-kucuk">Sil</button>
+                <button type="submit" class="btn btn-danger btn-sm">{{ __('panel.delete') }}</button>
             </form>
         @endif
     @endcan
 
     @if ($rol->isSuperAdmin())
-        <span class="urun-alt-bilgi">Değiştirilemez</span>
+        <span class="badge bg-secondary">{{ __('panel.immutable-role') }}</span>
     @endif
 </div>

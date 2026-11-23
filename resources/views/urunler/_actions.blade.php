@@ -1,27 +1,27 @@
-<div class="islem-alani">
+<div class="d-flex align-items-center flex-wrap gap-2">
     @can('create', App\Models\Order::class)
         @if ($urun->stock > 0)
-            <a href="{{ route('siparisler.create', $urun) }}" class="buton buton-birincil buton-kucuk">
-                Hızlı Sipariş Ver
+            <a href="{{ route('siparisler.create', $urun) }}" class="btn btn-primary btn-sm text-nowrap">
+                {{ __('panel.quick-order') }}
             </a>
         @else
-            <span class="buton buton-devre-disi buton-kucuk">Hızlı Sipariş Ver</span>
+            <button type="button" class="btn btn-primary btn-sm text-nowrap" disabled>{{ __('panel.quick-order') }}</button>
         @endif
     @endcan
 
     @can('update', $urun)
-        <a href="{{ route('urunler.edit', $urun) }}" class="buton buton-ikincil buton-kucuk">
-            Düzenle
+        <a href="{{ route('urunler.edit', $urun) }}" class="btn btn-secondary btn-sm">
+            {{ __('panel.edit') }}
         </a>
     @endcan
 
     @can('delete', $urun)
-        <form action="{{ route('urunler.destroy', $urun) }}" method="POST" class="satir-ici-form"
-            onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?')">
+        <form action="{{ route('urunler.destroy', $urun) }}" method="POST" class="m-0"
+            data-confirm="{{ __('panel.confirm-delete-product') }}" onsubmit="return confirm(this.dataset.confirm)">
             @csrf
             @method('DELETE')
 
-            <button type="submit" class="buton buton-tehlike buton-kucuk">Sil</button>
+            <button type="submit" class="btn btn-danger btn-sm">{{ __('panel.delete') }}</button>
         </form>
     @endcan
 </div>

@@ -40,22 +40,22 @@ class ProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'category_id.required' => 'Kategori seçimi zorunludur.',
-            'category_id.exists' => 'Seçilen kategori bulunamadı.',
-            'name.required' => 'Ürün adı zorunludur.',
-            'name.max' => 'Ürün adı en fazla 255 karakter olabilir.',
-            'sku.required' => 'SKU bilgisi zorunludur.',
-            'sku.max' => 'SKU en fazla 100 karakter olabilir.',
-            'sku.unique' => 'Bu SKU daha önce kullanılmış.',
-            'price.required' => 'Ürün fiyatı zorunludur.',
-            'price.numeric' => 'Ürün fiyatı sayısal olmalıdır.',
-            'price.min' => 'Ürün fiyatı negatif olamaz.',
-            'stock.required' => 'Stok adedi zorunludur.',
-            'stock.integer' => 'Stok adedi tam sayı olmalıdır.',
-            'stock.min' => 'Stok adedi negatif olamaz.',
-            'image.image' => 'Yüklenen dosya bir görsel olmalıdır.',
-            'image.mimes' => 'Görsel JPEG, PNG, JPG veya WEBP formatında olmalıdır.',
-            'image.max' => 'Görsel en fazla 2 MB olabilir.',
+            'category_id.required' => __('panel.validation.product.category_id-required'),
+            'category_id.exists' => __('panel.validation.product.category_id-exists'),
+            'name.required' => __('panel.validation.product.name-required'),
+            'name.max' => __('panel.validation.product.name-max'),
+            'sku.required' => __('panel.validation.product.sku-required'),
+            'sku.max' => __('panel.validation.product.sku-max'),
+            'sku.unique' => __('panel.validation.product.sku-unique'),
+            'price.required' => __('panel.validation.product.price-required'),
+            'price.numeric' => __('panel.validation.product.price-numeric'),
+            'price.min' => __('panel.validation.product.price-min'),
+            'stock.required' => __('panel.validation.product.stock-required'),
+            'stock.integer' => __('panel.validation.product.stock-integer'),
+            'stock.min' => __('panel.validation.product.stock-min'),
+            'image.image' => __('panel.validation.product.image-image'),
+            'image.mimes' => __('panel.validation.product.image-mimes'),
+            'image.max' => __('panel.validation.product.image-max'),
         ];
     }
 }

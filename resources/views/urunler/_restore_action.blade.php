@@ -1,9 +1,9 @@
 @can('restore', App\Models\Product::class)
-    <form action="{{ route('urunler.geri-yukle', $urun->id) }}" method="POST"
-        onsubmit="return confirm('Bu ürünü geri yüklemek istediğinize emin misiniz?')">
+    <form action="{{ route('urunler.geri-yukle', $urun->id) }}" method="POST" class="m-0"
+        data-confirm="{{ __('panel.confirm-restore-product') }}" onsubmit="return confirm(this.dataset.confirm)">
         @csrf
         @method('PATCH')
 
-        <button type="submit" class="buton buton-birincil buton-kucuk">Geri Yükle</button>
+        <button type="submit" class="btn btn-primary btn-sm text-nowrap">{{ __('panel.restore') }}</button>
     </form>
 @endcan

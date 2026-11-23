@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Kullanıcı Yönetimi')
+@section('title', __('panel.users-management'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -11,33 +11,35 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+
         <div>
-            <h1>Kullanıcı Yönetimi</h1>
-            <p>Panel kullanıcılarını ekleyin, rollerini belirleyin ve yönetin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.users-management') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.users-description') }}</p>
         </div>
 
         @can('create', App\Models\User::class)
-            <a href="{{ route('kullanicilar.create') }}" class="buton buton-birincil">
-                Yeni Kullanıcı Ekle
+            <a href="{{ route('kullanicilar.create') }}" class="btn btn-primary align-self-start">
+                {{ __('panel.new-user') }}
             </a>
         @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="kullanicilar-tablosu">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Ad Soyad</th>
-                    <th>E-posta</th>
-                    <th>Rol</th>
-                    <th>İşlemler</th>
-                </tr>
-            </thead>
-
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="kullanicilar-tablosu" class="table table-hover w-100">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ __('panel.full-name') }}</th>
+                        <th>{{ __('panel.email') }}</th>
+                        <th>{{ __('panel.role') }}</th>
+                        <th>{{ __('panel.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -62,7 +64,7 @@
                     top1Start: {
                         buttons: [{
                                 extend: 'copy',
-                                text: 'Kopyala',
+                                text: {{ Js::from(__('panel.copy')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3]
                                 }
@@ -90,14 +92,14 @@
                             },
                             {
                                 extend: 'print',
-                                text: 'Tümünü Yazdır',
+                                text: {{ Js::from(__('panel.print-all')) }},
                                 exportOptions: {
                                     columns: [0, 1, 2, 3],
                                 }
                             },
                             {
                                 extend: 'selectNone',
-                                text: 'Seçimi Temizle'
+                                text: {{ Js::from(__('panel.clear-selection')) }}
                             }
                         ]
                     }
@@ -127,7 +129,7 @@
                             const ad = '<strong>' + guvenliMetin(veri) + '</strong>';
 
                             const aciklama = satir.is_current ?
-                                '<div class="urun-alt-bilgi">Bu hesap sizsiniz</div>' :
+                                '<div class="urun-alt-bilgi">' + {{ Js::from(__('panel.current-account')) }} + '</div>' :
                                 '';
 
                             return ad + aciklama;
@@ -160,16 +162,9 @@
                 order: [],
 
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen kullanıcı bulunamadı.',
-                    emptyTable: 'Henüz kullanıcı bulunmuyor.',
-                    paginate: {
-                        previous: 'Önceki',
-                        next: 'Sonraki'
-                    }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-users')) }},
+                    emptyTable: {{ Js::from(__('panel.no-users')) }}
                 }
             });
         });

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.adminkit')
 
-@section('title', 'Silinen Ürünler')
+@section('title', __('panel.deleted-products'))
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/3.1.3/css/dataTables.dataTables.css">
@@ -9,29 +9,35 @@
 @endpush
 
 @section('content')
-    <section class="baslik-alani">
+    <section class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
-            <h1>Silinen Ürünler</h1>
-            <p>Soft Delete ile silinen ürünleri görüntüleyin ve geri yükleyin.</p>
+            <h1 class="h3 mb-2">{{ __('panel.deleted-products') }}</h1>
+            <p class="text-muted mb-0">{{ __('panel.deleted-products-description') }}</p>
         </div>
 
-        <a href="{{ route('urunler.index') }}" class="buton buton-ikincil">Ürünlere Dön</a>
+        @can('viewAny', App\Models\Product::class)
+            <a href="{{ route('urunler.index') }}" class="btn btn-secondary">{{ __('panel.back-products') }}</a>
+        @else
+            <a href="{{ route('anasayfa') }}" class="btn btn-secondary">{{ __('panel.home') }}</a>
+        @endcan
     </section>
 
-    <div class="tablo-kapsayici">
-        <table id="silinen-urunler-tablosu">
-            <thead>
-                <tr>
-                    <th>Görsel</th>
-                    <th>Ürün</th>
-                    <th>Kategori</th>
-                    <th>Stok</th>
-                    <th>Silinme Tarihi</th>
-                    <th>İşlem</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card">
+        <div class="card-body adminkit-tablo">
+            <table id="silinen-urunler-tablosu" class="table table-striped align-middle w-100">
+                <thead>
+                    <tr>
+                        <th>{{ __('panel.image') }}</th>
+                        <th>{{ __('panel.product') }}</th>
+                        <th>{{ __('panel.category') }}</th>
+                        <th>{{ __('panel.stock') }}</th>
+                        <th>{{ __('panel.deleted-at') }}</th>
+                        <th>{{ __('panel.action') }}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 @endsection
 
@@ -63,18 +69,19 @@
                             }
 
                             return '<strong>' + guvenliMetin(veri) + '</strong>' +
-                                '<div class="urun-alt-bilgi">SKU: ' + guvenliMetin(satir.sku) + '</div>';
+                                '<div class="text-muted small mt-1">SKU: ' + guvenliMetin(satir.sku) + '</div>';
                         }
                     },
                     { data: 'category_name', render: DataTable.render.text() },
                     {
                         data: 'stock',
                         render: function (veri, tur) {
-                            return tur === 'display' ? veri + ' adet' : veri;
+                            return tur === 'display' ? veri + ' ' + {{ Js::from(__('panel.units')) }} : veri;
                         }
                     },
                     {
                         data: 'deleted_at',
+                        className: 'text-nowrap',
                         render: function (veri, tur, satir) {
                             return tur === 'display' || tur === 'filter' ? satir.deleted_at_display : veri;
                         }
@@ -82,17 +89,13 @@
                     { data: 'actions', orderable: false, searchable: false }
                 ],
                 createdRow: function (satir) {
-                    satir.classList.add('silinen-satir');
+                    satir.classList.add('text-muted');
                 },
                 order: [],
                 language: {
-                    search: 'Ara:',
-                    lengthMenu: 'Sayfada _MENU_ kayıt',
-                    info: '_TOTAL_ kayıttan _START_–_END_ arası',
-                    infoEmpty: 'Kayıt yok',
-                    zeroRecords: 'Eşleşen silinmiş ürün bulunamadı.',
-                    emptyTable: 'Silinen ürün bulunmuyor.',
-                    paginate: { previous: 'Önceki', next: 'Sonraki' }
+                    ...{{ Js::from(__('panel.datatable')) }},
+                    zeroRecords: {{ Js::from(__('panel.no-matching-deleted-products')) }},
+                    emptyTable: {{ Js::from(__('panel.no-deleted-products')) }}
                 }
             });
         });
